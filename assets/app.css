@@ -25,4 +25,5 @@
 @media(max-width:900px){.price-popup{top:10px}.price-popup-body{overflow-x:auto}.price-popup-body table{display:table;min-width:560px}}
 .price-popup{left:auto;right:18px;width:min(470px,calc(100vw - 36px));transform:none}.price-popup-head{padding:10px 13px}.price-popup-head h3{font-size:14px}.price-popup-close{width:29px;height:29px;font-size:17px}.price-popup-body{padding:7px 10px 10px}.price-popup-body th,.price-popup-body td{padding:7px 8px;font-size:10px}
 @media(max-width:900px){.price-popup{right:8px;width:calc(100vw - 16px)}.price-popup-body table{min-width:0}}
+.customer-details-simple{padding:14px 16px}.customer-details-simple b{font-size:15px;font-weight:800;color:var(--brand-dark);margin-bottom:6px}.customer-details-simple span{font-size:12px;font-weight:700;color:#344a3e;line-height:1.5;white-space:pre-line}
 @media(max-width:900px){.bill-top{grid-template-columns:1fr}.bill-info-stack{grid-template-columns:1fr 1fr}.bill-info-stack>div:first-child{order:2}.bill-info-stack>div:nth-child(2){order:1}}
