@@ -20,6 +20,18 @@ function require_login(): void { if (!logged_in()) { header('Location: ?page=log
 function redirect(string $to): never { header('Location: '.$to); exit; }
 function flash(string $msg, string $type='ok'): void { $_SESSION['flash']=['msg'=>$msg,'type'=>$type]; }
 function setting(PDO $pdo, string $key, string $fallback=''): string { $s=$pdo->prepare('SELECT setting_value FROM settings WHERE setting_key=?'); $s->execute([$key]); return (string)($s->fetchColumn() ?: $fallback); }
+function whatsapp_number(?string $mobile): string {
+    $digits=preg_replace('/\D/','',$mobile??'');
+    if(strlen($digits)===10) $digits='91'.$digits;
+    return strlen($digits)===12&&str_starts_with($digits,'91')?$digits:'';
+}
+function normalize_mobile(?string $mobile): string {
+    $raw=trim($mobile??'');
+    if($raw==='') return '';
+    $number=whatsapp_number($raw);
+    if($number==='') throw new RuntimeException('Enter a valid 10-digit Indian WhatsApp number.');
+    return $number;
+}
 function customer_balance(PDO $pdo, int $id, ?int $excludeBill=null): float {
     $s=$pdo->prepare('SELECT opening_balance FROM customers WHERE id=?'); $s->execute([$id]); $bal=(float)$s->fetchColumn();
     $sql="SELECT COALESCE(SUM(subtotal-amount_received),0) FROM bills WHERE customer_id=? AND status='active'".($excludeBill?' AND id<>?':'');
