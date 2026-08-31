@@ -12,6 +12,8 @@ Dependency-free PHP 8.1 / MySQL application for non-GST bills, Tamil print names
 
 Use UTF-8/utf8mb4 throughout. The Print / Save PDF button opens the browser print dialog; choose **Save as PDF**. On supported Android browsers, Share uses the system share sheet. The WhatsApp fallback shares the secure bill link.
 
+After upgrading an existing installation, import each file in `migrations/` once through phpMyAdmin. Migration files are safe to run again.
+
 ## Important behavior
 
 - Search and entry use the English product name only.
