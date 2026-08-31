@@ -27,4 +27,5 @@
 @media(max-width:900px){.price-popup{right:8px;width:calc(100vw - 16px)}.price-popup-body table{min-width:0}}
 .customer-details-simple{padding:14px 16px}.customer-details-simple b{font-size:15px;font-weight:800;color:var(--brand-dark);margin-bottom:6px}.customer-details-simple span{font-size:12px;font-weight:700;color:#344a3e;line-height:1.5;white-space:pre-line}
 .customer-field #bill-customer-search{padding-right:43px}.customer-clear{position:absolute;z-index:4;right:8px;top:27px;width:31px;height:31px;padding:0;border-radius:50%;background:#edf3ef;color:#52645a;font-size:18px;box-shadow:none}.customer-clear:hover{background:#dde9e2;color:var(--brand-dark);transform:none}.customer-clear[hidden]{display:none}
+.customer-field #bill-customer-search{font-weight:800;color:var(--brand-dark);background:#fff}
 @media(max-width:900px){.bill-top{grid-template-columns:1fr}.bill-info-stack{grid-template-columns:1fr 1fr}.bill-info-stack>div:first-child{order:2}.bill-info-stack>div:nth-child(2){order:1}}
