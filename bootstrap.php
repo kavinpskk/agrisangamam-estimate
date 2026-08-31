@@ -32,6 +32,11 @@ function normalize_mobile(?string $mobile): string {
     if($number==='') throw new RuntimeException('Enter a valid 10-digit Indian WhatsApp number.');
     return $number;
 }
+function supports_bill_balance_snapshot(PDO $pdo): bool {
+    static $supported=null;
+    if($supported===null){$s=$pdo->query("SHOW COLUMNS FROM bills LIKE 'closing_balance'");$supported=(bool)$s->fetch();}
+    return $supported;
+}
 function customer_balance(PDO $pdo, int $id, ?int $excludeBill=null): float {
     $s=$pdo->prepare('SELECT opening_balance FROM customers WHERE id=?'); $s->execute([$id]); $bal=(float)$s->fetchColumn();
     $sql="SELECT COALESCE(SUM(subtotal-amount_received),0) FROM bills WHERE customer_id=? AND status='active'".($excludeBill?' AND id<>?':'');
