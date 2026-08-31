@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS bills (
   customer_id INT UNSIGNED NOT NULL,
   subtotal DECIMAL(12,2) NOT NULL,
   amount_received DECIMAL(12,2) NOT NULL DEFAULT 0,
+  closing_balance DECIMAL(12,2) NULL,
   share_token CHAR(64) NOT NULL UNIQUE,
   status ENUM('active','cancelled') NOT NULL DEFAULT 'active',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
