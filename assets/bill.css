@@ -1,0 +1,265 @@
+.bill-print {
+  width: 136mm !important;
+  max-width: 136mm !important;
+  min-height: 198mm !important;
+  margin: 18px auto !important;
+  padding: 0 !important;
+  background: #fff !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .08) !important;
+  overflow: hidden !important;
+}
+
+.bill-paper {
+  width: 136mm !important;
+  height: 198mm !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  border: 1px solid #111 !important;
+  background: #fff !important;
+}
+
+.bill-paper-title {
+  display: flex !important;
+  flex: 0 0 18mm !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-bottom: 1px solid #111 !important;
+}
+
+.bill-paper-title h1 {
+  margin: 0 !important;
+  color: #111 !important;
+  font-size: 19px !important;
+  line-height: 1 !important;
+  letter-spacing: 1px !important;
+}
+
+.bill-paper .bill-print-meta {
+  display: grid !important;
+  grid-template-columns: 65% 35% !important;
+  flex: 0 0 20mm !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid #111 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+
+.bill-paper .bill-print-meta > div {
+  min-width: 0 !important;
+  padding: 3mm 4mm !important;
+}
+
+.bill-paper .bill-number-block {
+  border-left: 1px solid #111 !important;
+  text-align: left !important;
+}
+
+.bill-paper .bill-print-meta > div > div {
+  display: grid !important;
+  grid-template-columns: 26mm 4mm minmax(0, 1fr) !important;
+  line-height: 1.55 !important;
+}
+
+.bill-paper .bill-number-block > div {
+  grid-template-columns: 19mm 4mm minmax(0, 1fr) !important;
+}
+
+.bill-paper .bill-print-meta b,
+.bill-paper .bill-print-meta strong,
+.bill-paper .bill-customer-block b,
+.bill-paper .bill-customer-block strong {
+  min-width: 0 !important;
+  color: #111 !important;
+  font-size: 10px !important;
+  overflow-wrap: anywhere !important;
+}
+
+.bill-paper .bill-items-print {
+  display: table !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  margin: 0 !important;
+  table-layout: fixed !important;
+  border: 0 !important;
+  border-collapse: collapse !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+}
+
+.bill-paper .bill-items-print col.col-sno { width: 7% !important; }
+.bill-paper .bill-items-print col.col-rate { width: 9% !important; }
+.bill-paper .bill-items-print col.col-product { width: 50% !important; }
+.bill-paper .bill-items-print col.col-qty { width: 14% !important; }
+.bill-paper .bill-items-print col.col-unit { width: 7% !important; }
+.bill-paper .bill-items-print col.col-amount { width: 13% !important; }
+
+.bill-paper .bill-items-print th,
+.bill-paper .bill-items-print td {
+  min-width: 0 !important;
+  max-width: none !important;
+  padding: 4px 3px !important;
+  border-right: 1px solid #111 !important;
+  border-bottom: 0 !important;
+  color: #111 !important;
+  font-size: 9px !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+}
+
+.bill-paper .bill-items-print th {
+  height: 9mm !important;
+  border-bottom: 1px solid #111 !important;
+  background: #fff !important;
+  text-transform: none !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.bill-paper .bill-items-print th:last-child,
+.bill-paper .bill-items-print td:last-child {
+  border-right: 0 !important;
+}
+
+.bill-paper .bill-items-print tbody {
+  height: 100% !important;
+}
+
+.bill-paper .bill-items-print .bill-table-filler td {
+  height: auto !important;
+}
+
+.bill-paper .bill-items-print tfoot {
+  height: 8mm !important;
+}
+
+.bill-paper .bill-items-print tfoot td {
+  border-top: 1px solid #111 !important;
+  border-bottom: 1px solid #111 !important;
+  font-weight: 800 !important;
+}
+
+.bill-paper .bill-print-totals {
+  display: flex !important;
+  flex: 0 0 18mm !important;
+  width: 100% !important;
+  min-height: 18mm !important;
+  margin: 0 !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  overflow: hidden !important;
+}
+
+.bill-paper .bill-print-totals .balance-summary {
+  display: table !important;
+  width: 65% !important;
+  flex: 0 0 65% !important;
+  margin: 0 !important;
+  border: 0 !important;
+  table-layout: fixed !important;
+}
+
+.bill-paper .balance-summary td {
+  padding: 2px 4mm !important;
+  border: 0 !important;
+  color: #111 !important;
+  font-size: 8.5px !important;
+  line-height: 1.25 !important;
+  font-weight: 800 !important;
+}
+
+.bill-paper .balance-summary td:first-child { width: 45% !important; }
+.bill-paper .balance-summary td:nth-child(2) { width: 5% !important; }
+.bill-paper .balance-summary td:last-child { width: 50% !important; }
+
+.bill-paper .current-bill-total {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  align-content: start !important;
+  gap: 5px !important;
+  width: 35% !important;
+  min-width: 35% !important;
+  flex: 0 0 35% !important;
+  margin: 0 !important;
+  padding: 3mm !important;
+  border: 0 !important;
+  border-left: 1px solid #111 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  text-align: left !important;
+}
+
+.bill-paper .current-bill-total span,
+.bill-paper .current-bill-total b {
+  margin: 0 !important;
+  color: #111 !important;
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+
+@media print {
+  @page {
+    size: A5 portrait;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 148mm !important;
+    height: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .bill-print {
+    width: 128mm !important;
+    max-width: 128mm !important;
+    min-height: 190mm !important;
+    height: 190mm !important;
+    margin: 10mm auto !important;
+    box-shadow: none !important;
+  }
+
+  .bill-paper {
+    width: 128mm !important;
+    height: 190mm !important;
+  }
+
+  .bill-paper .bill-print-meta b,
+  .bill-paper .bill-print-meta strong,
+  .bill-paper .bill-customer-block b,
+  .bill-paper .bill-customer-block strong {
+    font-size: 9px !important;
+  }
+
+  .bill-paper .bill-items-print th,
+  .bill-paper .bill-items-print td {
+    font-size: 8.5px !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .bill-print {
+    width: min(136mm, calc(100vw - 28px)) !important;
+    max-width: calc(100vw - 28px) !important;
+    min-height: 0 !important;
+  }
+
+  .bill-paper {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 136 / 198 !important;
+  }
+}
