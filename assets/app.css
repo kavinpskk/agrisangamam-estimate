@@ -17,3 +17,5 @@
 .bill-info-stack label{color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase;margin-bottom:5px}.bill-info-stack input{padding:7px 9px;background:#fff;font-weight:650}
 @media(max-width:900px){.bill-top{grid-template-columns:1fr;padding:16px;gap:16px}.customer-search-row{grid-template-columns:1fr}.bill-info-stack{grid-template-columns:1fr 1fr;padding:0;border:0}.customer-details{padding:12px}.bill-actions{width:100%}.bill-actions .btn,.bill-actions .save-bill{flex:1;min-width:0}}
 .products-heading{border-bottom:0;margin-bottom:8px}.products-heading h2{font-size:24px;font-weight:800;letter-spacing:-.35px}
+.bill-top{grid-template-columns:minmax(360px,1.8fr) minmax(360px,1fr);align-items:start}.bill-info-stack{grid-template-columns:1fr 1fr;gap:12px;align-items:start}.bill-info-stack>div:first-child{order:2}.bill-info-stack>div:nth-child(2){order:1}.items-table-head{font-size:13px;font-weight:800;color:#26372e;letter-spacing:.2px}
+@media(max-width:900px){.bill-top{grid-template-columns:1fr}.bill-info-stack{grid-template-columns:1fr 1fr}.bill-info-stack>div:first-child{order:2}.bill-info-stack>div:nth-child(2){order:1}}
