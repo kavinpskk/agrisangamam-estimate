@@ -44,3 +44,16 @@ function customer_balance(PDO $pdo, int $id, ?int $excludeBill=null): float {
     $s=$pdo->prepare('SELECT COALESCE(SUM(amount),0) FROM payments WHERE customer_id=?'); $s->execute([$id]);
     return $bal-(float)$s->fetchColumn();
 }
+function customer_ledger(PDO $pdo, int $customerId): array {
+    $s=$pdo->prepare('SELECT * FROM customers WHERE id=?');$s->execute([$customerId]);$customer=$s->fetch();
+    if(!$customer) return ['customer'=>null,'rows'=>[],'balance'=>0.0];
+    $events=[];
+    $s=$pdo->prepare("SELECT id,bill_no,subtotal,amount_received,created_at FROM bills WHERE customer_id=? AND status='active'");$s->execute([$customerId]);
+    foreach($s->fetchAll() as $r)$events[]=['timestamp'=>$r['created_at'],'order'=>1,'type'=>'Bill','reference'=>'Bill #'.str_pad((string)$r['bill_no'],4,'0',STR_PAD_LEFT),'note'=>'Bill amount ₹'.money($r['subtotal']).($r['amount_received']>0?' · Received ₹'.money($r['amount_received']):''),'delta'=>(float)$r['subtotal']-(float)$r['amount_received']];
+    $s=$pdo->prepare('SELECT id,amount,note,created_at FROM payments WHERE customer_id=?');$s->execute([$customerId]);
+    foreach($s->fetchAll() as $r){$reversal=(float)$r['amount']<0;$events[]=['timestamp'=>$r['created_at'],'order'=>2,'type'=>$reversal?'Reversal':'Payment','reference'=>'Payment #'.$r['id'],'note'=>$r['note'],'delta'=>-(float)$r['amount']];}
+    usort($events,fn($a,$b)=>[$a['timestamp'],$a['order'],$a['reference']]<=>[$b['timestamp'],$b['order'],$b['reference']]);
+    $running=(float)$customer['opening_balance'];$rows=[['timestamp'=>null,'type'=>'Opening','reference'=>'Opening Balance','note'=>'','delta'=>$running,'balance'=>$running]];
+    foreach($events as $event){$running=round($running+$event['delta'],2);$event['balance']=$running;$rows[]=$event;}
+    return ['customer'=>$customer,'rows'=>$rows,'balance'=>$running];
+}
