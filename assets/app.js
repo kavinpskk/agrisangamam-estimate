@@ -80,9 +80,15 @@ function validateProductRow(row, focusInvalid = true) {
 function focusNextProduct(row) {
   if (!validateProductRow(row)) return;
   const rows = qsa('.item-row');
-  const next = rows[rows.indexOf(row) + 1];
-  if (next) qs('.product-search', next).focus();
-  else addRow({}, true);
+  let next = rows[rows.indexOf(row) + 1];
+  if (!next) next = addRow();
+  const nextProduct = next && qs('.product-search', next);
+  if (nextProduct) {
+    setTimeout(() => {
+      nextProduct.focus();
+      nextProduct.select();
+    }, 0);
+  }
 }
 
 async function showPriceHistory(product) {
@@ -156,6 +162,7 @@ function addRow(data = {}, focus = false) {
   qs('.qty', row).addEventListener('keydown', event => {
     if (event.key === 'Enter') {
       event.preventDefault();
+      event.stopPropagation();
       if (!validateProductRow(row)) return;
       qs('.rate', row).focus();
       qs('.rate', row).select();
@@ -168,6 +175,7 @@ function addRow(data = {}, focus = false) {
   rateInput.addEventListener('keydown', event => {
     if (event.key === 'Enter') {
       event.preventDefault();
+      event.stopPropagation();
       hidePriceHistory();
       focusNextProduct(row);
     }
@@ -296,9 +304,14 @@ function bindProductSearch(row) {
       results = [];
     } else if (event.key === 'Enter') {
       event.preventDefault();
+      event.stopPropagation();
       if (!input.value.trim()) {
         menu.innerHTML = '';
-        qs('.save-bill')?.focus();
+        const received = qs('#bill-received');
+        if (received) {
+          received.focus();
+          received.select();
+        }
       } else if (results.length) {
         choose(results[active >= 0 ? active : 0]);
       } else {
