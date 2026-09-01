@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.getAttribute('onclick')?.startsWith('downloadBillPdf(')
       );
       const match = downloadButton?.getAttribute('onclick')?.match(/downloadBillPdf\('([^']+)'\)/);
-      printBillPdf(match?.[1] || 'SGAS-Bill.pdf');
+      downloadBillPdf(match?.[1] || 'SGAS-Bill.pdf');
     });
     billToolbar.insertBefore(printButton, billToolbar.firstChild);
   }
@@ -674,24 +674,6 @@ async function createSinglePageBillPdf(layout = 'center') {
   const y = rightFeed ? 5 : (pageHeight - height) / 2;
   pdf.addImage(canvas, 'JPEG', x, y, width, height, undefined, 'FAST');
   return pdf;
-}
-
-async function printBillPdf(filename) {
-  const printWindow = window.open('', '_blank');
-  try {
-    const pdf = await createSinglePageBillPdf();
-    if (typeof pdf.autoPrint === 'function') pdf.autoPrint();
-    const pdfUrl = pdf.output('bloburl');
-    if (printWindow) {
-      printWindow.location.replace(pdfUrl);
-    } else {
-      pdf.save(filename);
-    }
-  } catch (error) {
-    console.error(error);
-    if (printWindow) printWindow.close();
-    window.print();
-  }
 }
 
 async function downloadBillPdf(filename) {
