@@ -354,6 +354,19 @@ function bindProductSearch(row) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const billCss = qs('link[href^="assets/bill.css"]');
+  if (billCss && !billCss.href.includes('v=20260901-2')) billCss.href = 'assets/bill.css?v=20260901-2';
+  const billPrint = qs('.bill-print');
+  const billToolbar = billPrint?.previousElementSibling;
+  if (billToolbar?.classList.contains('actions') && !qs('[data-print-bill]', billToolbar)) {
+    const printButton = document.createElement('button');
+    printButton.type = 'button';
+    printButton.dataset.printBill = '1';
+    printButton.textContent = 'Print A5';
+    printButton.addEventListener('click', () => window.print());
+    billToolbar.insertBefore(printButton, billToolbar.firstChild);
+  }
+
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
 
   const search = qs('#bill-customer-search');
@@ -592,7 +605,7 @@ function billPdfOptions(filename) {
     margin: [6, 6, 6, 6],
     filename,
     image: { type: 'jpeg', quality: .98 },
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+    html2canvas: { scale: 2.5, useCORS: true, backgroundColor: '#ffffff', logging: false },
     jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' },
     pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.summary'] }
   };
