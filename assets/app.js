@@ -366,20 +366,20 @@ document.addEventListener('DOMContentLoaded', () => {
     printButton.addEventListener('click', () => window.print());
     billToolbar.insertBefore(printButton, billToolbar.firstChild);
   }
-  if (billToolbar?.classList.contains('actions') && !qs('[data-left-feed-bill]', billToolbar)) {
+  if (billToolbar?.classList.contains('actions') && !qs('[data-right-feed-bill]', billToolbar)) {
     const downloadButton = qsa('button', billToolbar).find(button =>
       button.getAttribute('onclick')?.startsWith('downloadBillPdf(')
     );
     if (downloadButton) {
-      const leftFeedButton = document.createElement('button');
-      leftFeedButton.type = 'button';
-      leftFeedButton.dataset.leftFeedBill = '1';
-      leftFeedButton.textContent = 'A5 Left-Feed PDF';
-      leftFeedButton.addEventListener('click', () => {
+      const rightFeedButton = document.createElement('button');
+      rightFeedButton.type = 'button';
+      rightFeedButton.dataset.rightFeedBill = '1';
+      rightFeedButton.textContent = 'A5 Right-Feed PDF';
+      rightFeedButton.addEventListener('click', () => {
         const match = downloadButton.getAttribute('onclick')?.match(/downloadBillPdf\('([^']+)'\)/);
-        if (match) downloadLeftFeedBillPdf(match[1]);
+        if (match) downloadRightFeedBillPdf(match[1]);
       });
-      downloadButton.insertAdjacentElement('afterend', leftFeedButton);
+      downloadButton.insertAdjacentElement('afterend', rightFeedButton);
     }
   }
 
@@ -672,25 +672,25 @@ async function createSinglePageBillPdf(layout = 'center') {
   });
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  const leftFeed = layout === 'left-feed';
-  const leftMargin = 5;
-  const rightMargin = leftFeed ? 23 : 5;
-  const verticalMargin = leftFeed ? 7 : 5;
+  const rightFeed = layout === 'right-feed';
+  const leftMargin = rightFeed ? 23 : 5;
+  const rightMargin = 5;
+  const verticalMargin = rightFeed ? 7 : 5;
   const maxWidth = pageWidth - leftMargin - rightMargin;
   const maxHeight = pageHeight - (verticalMargin * 2);
   const scale = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
   const width = canvas.width * scale;
   const height = canvas.height * scale;
-  const x = leftFeed ? leftMargin : (pageWidth - width) / 2;
+  const x = rightFeed ? leftMargin : (pageWidth - width) / 2;
   const y = (pageHeight - height) / 2;
   pdf.addImage(canvas, 'JPEG', x, y, width, height, undefined, 'FAST');
   return pdf;
 }
 
-async function downloadLeftFeedBillPdf(filename) {
+async function downloadRightFeedBillPdf(filename) {
   try {
-    const pdf = await createSinglePageBillPdf('left-feed');
-    pdf.save(filename.replace(/\.pdf$/i, '-Left-Feed.pdf'));
+    const pdf = await createSinglePageBillPdf('right-feed');
+    pdf.save(filename.replace(/\.pdf$/i, '-Right-Feed.pdf'));
   } catch (error) {
     console.error(error);
     window.print();
