@@ -1,0 +1,199 @@
+.ledger-page-head {
+  margin-bottom: 18px;
+}
+
+.ledger-page-head h1,
+.ledger-page-head p {
+  margin: 0;
+}
+
+.ledger-page-head p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.ledger-selector {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  padding: 17px 19px;
+}
+
+.ledger-selector p {
+  position: relative;
+  margin: 0;
+}
+
+.ledger-customer-box {
+  position: relative;
+}
+
+.ledger-customer-clear {
+  position: absolute;
+  right: 8px;
+  bottom: 7px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.ledger-suggestions {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  display: none;
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 16px 35px rgba(12, 54, 34, .16);
+}
+
+.ledger-suggestions.open {
+  display: block;
+}
+
+.ledger-suggestions button {
+  display: block;
+  width: 100%;
+  padding: 10px 11px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  box-shadow: none;
+}
+
+.ledger-suggestions button:hover,
+.ledger-suggestions button.active {
+  background: var(--brand-soft);
+}
+
+.ledger-suggestions strong,
+.ledger-suggestions small {
+  display: block;
+}
+
+.ledger-suggestions small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.ledger-selected-balance {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.ledger-tools {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 15px;
+}
+
+.ledger-tools p {
+  margin: 0;
+}
+
+.ledger-tools input {
+  min-width: 140px;
+  padding: 8px 10px;
+}
+
+.ledger-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.ledger-summary .card {
+  margin: 0;
+  padding: 15px;
+}
+
+.ledger-summary small,
+.ledger-summary b {
+  display: block;
+}
+
+.ledger-summary small {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.ledger-summary b {
+  margin-top: 6px;
+  color: var(--brand-dark);
+  font-size: 19px;
+}
+
+.ledger-table-wrap {
+  overflow-x: auto;
+}
+
+.ledger-table-wrap table {
+  min-width: 820px;
+}
+
+.ledger-table-wrap th,
+.ledger-table-wrap td {
+  padding: 10px 9px;
+}
+
+.ledger-empty {
+  padding: 28px !important;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .ledger-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .ledger-selector {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+
+  .ledger-selector > button {
+    width: 100%;
+  }
+
+  .ledger-tools p {
+    flex: 1 1 125px;
+  }
+
+  .ledger-tools input {
+    min-width: 0;
+  }
+
+  .ledger-tools .btn,
+  .ledger-tools button {
+    flex: 1 1 auto;
+  }
+}
+
+@media print {
+  .ledger-summary {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
