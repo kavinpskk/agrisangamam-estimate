@@ -355,7 +355,7 @@ function bindProductSearch(row) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20260901-3')) billCss.href = 'assets/bill.css?v=20260901-3';
+  if (billCss && !billCss.href.includes('v=20260901-4')) billCss.href = 'assets/bill.css?v=20260901-4';
   const billPrint = qs('.bill-print');
   const billToolbar = billPrint?.previousElementSibling;
   if (billToolbar?.classList.contains('actions') && !qs('[data-print-bill]', billToolbar)) {
@@ -602,7 +602,7 @@ function shareBillToCustomer(phone, title, url) {
 
 function billPdfOptions(filename) {
   return {
-    margin: [6, 6, 6, 6],
+    margin: [5, 5, 5, 5],
     filename,
     image: { type: 'jpeg', quality: .98 },
     html2canvas: { scale: 2.5, useCORS: true, backgroundColor: '#ffffff', logging: false },
