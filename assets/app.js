@@ -673,8 +673,8 @@ async function createSinglePageBillPdf(layout = 'center') {
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
   const rightFeed = layout === 'right-feed';
-  const leftMargin = rightFeed ? 2 : 5;
-  const rightMargin = rightFeed ? 26 : 5;
+  const leftMargin = rightFeed ? 0.5 : 5;
+  const rightMargin = rightFeed ? pageWidth - 104.5 : 5;
   const verticalMargin = rightFeed ? 7 : 5;
   const maxWidth = pageWidth - leftMargin - rightMargin;
   const maxHeight = pageHeight - (verticalMargin * 2);
@@ -682,7 +682,7 @@ async function createSinglePageBillPdf(layout = 'center') {
   const width = canvas.width * scale;
   const height = canvas.height * scale;
   const x = rightFeed ? leftMargin : (pageWidth - width) / 2;
-  const y = (pageHeight - height) / 2;
+  const y = rightFeed ? 5 : (pageHeight - height) / 2;
   pdf.addImage(canvas, 'JPEG', x, y, width, height, undefined, 'FAST');
   return pdf;
 }
