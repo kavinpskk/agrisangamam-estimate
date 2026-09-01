@@ -610,21 +610,83 @@ function billPdfOptions(filename) {
   };
 }
 
+function loadPdfScript(src, ready) {
+  if (ready()) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      existing.addEventListener('load', resolve, { once: true });
+      existing.addEventListener('error', reject, { once: true });
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error('Unable to load the PDF library.'));
+    document.head.appendChild(script);
+  });
+}
+
+async function createSinglePageBillPdf() {
+  const bill = qs('.bill-print');
+  if (!bill) throw new Error('Bill preview was not found.');
+  await loadPdfScript(
+    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+    () => typeof window.html2canvas === 'function'
+  );
+  await loadPdfScript(
+    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+    () => Boolean(window.jspdf?.jsPDF)
+  );
+  if (document.fonts?.ready) await document.fonts.ready;
+
+  const canvas = await window.html2canvas(bill, {
+    scale: 2.5,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    logging: false,
+    scrollX: 0,
+    scrollY: 0
+  });
+  const pdf = new window.jspdf.jsPDF({
+    unit: 'mm',
+    format: 'a5',
+    orientation: 'portrait',
+    compress: true
+  });
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const maxWidth = pageWidth - 10;
+  const maxHeight = pageHeight - 10;
+  const scale = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
+  const width = canvas.width * scale;
+  const height = canvas.height * scale;
+  const x = (pageWidth - width) / 2;
+  const y = (pageHeight - height) / 2;
+  pdf.addImage(canvas, 'JPEG', x, y, width, height, undefined, 'FAST');
+  return pdf;
+}
+
 async function downloadBillPdf(filename) {
-  if (typeof html2pdf === 'undefined') {
+  try {
+    const pdf = await createSinglePageBillPdf();
+    pdf.save(filename);
+  } catch (error) {
+    console.error(error);
     window.print();
-    return;
   }
-  await html2pdf().set(billPdfOptions(filename)).from(qs('.bill-print')).save();
 }
 
 async function shareBillPdf(filename) {
-  if (typeof html2pdf === 'undefined') {
+  let blob;
+  try {
+    const pdf = await createSinglePageBillPdf();
+    blob = pdf.output('blob');
+  } catch (error) {
+    console.error(error);
     window.print();
     return;
   }
-  const worker = html2pdf().set(billPdfOptions(filename)).from(qs('.bill-print')).toPdf();
-  const blob = await worker.outputPdf('blob');
   const file = new File([blob], filename, { type: 'application/pdf' });
   if (navigator.share && navigator.canShare?.({ files: [file] })) {
     try {
