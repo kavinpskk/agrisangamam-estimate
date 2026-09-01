@@ -673,8 +673,8 @@ async function createSinglePageBillPdf(layout = 'center') {
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
   const rightFeed = layout === 'right-feed';
-  const leftMargin = rightFeed ? 23 : 5;
-  const rightMargin = 5;
+  const leftMargin = rightFeed ? 2 : 5;
+  const rightMargin = rightFeed ? 26 : 5;
   const verticalMargin = rightFeed ? 7 : 5;
   const maxWidth = pageWidth - leftMargin - rightMargin;
   const maxHeight = pageHeight - (verticalMargin * 2);
