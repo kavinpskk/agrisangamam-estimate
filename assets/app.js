@@ -243,7 +243,7 @@ function bindProductSearch(row) {
     input.setCustomValidity('');
     qs('.tamil-name', row).value = product.tamil_name || '';
     qs('.unit', row).value = product.unit || '';
-    qs('.rate', row).value = product.default_rate ?? '';
+    qs('.rate', row).value = '';
     menu.innerHTML = '';
     results = [];
     active = -1;
