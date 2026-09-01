@@ -228,7 +228,7 @@ function bindProductSearch(row) {
     qs('.product-id', row).value = '';
     qs('.tamil-name', row).value = '';
     qs('.unit', row).value = '';
-    qs('.rate', row).value = product.default_rate ?? '';
+    qs('.rate', row).value = '';
     qs('.amount', row).value = '0.00';
     input.setCustomValidity('');
     hidePriceHistory();
@@ -243,7 +243,7 @@ function bindProductSearch(row) {
     input.setCustomValidity('');
     qs('.tamil-name', row).value = product.tamil_name || '';
     qs('.unit', row).value = product.unit || '';
-    qs('.rate', row).value = '';
+    qs('.rate', row).value = product.default_rate ?? '';
     menu.innerHTML = '';
     results = [];
     active = -1;
