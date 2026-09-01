@@ -355,7 +355,7 @@ function bindProductSearch(row) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20260901-4')) billCss.href = 'assets/bill.css?v=20260901-4';
+  if (billCss && !billCss.href.includes('v=20260901-5')) billCss.href = 'assets/bill.css?v=20260901-5';
   const billPrint = qs('.bill-print');
   const billToolbar = billPrint?.previousElementSibling;
   if (billToolbar?.classList.contains('actions') && !qs('[data-print-bill]', billToolbar)) {
@@ -607,7 +607,7 @@ function billPdfOptions(filename) {
     image: { type: 'jpeg', quality: .98 },
     html2canvas: { scale: 2.5, useCORS: true, backgroundColor: '#ffffff', logging: false },
     jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.summary'] }
+    pagebreak: { mode: ['avoid-all'], avoid: ['.bill-print', '.bill-paper', 'tr'] }
   };
 }
 
