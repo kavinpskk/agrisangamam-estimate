@@ -220,6 +220,8 @@ function bindProductSearch(row) {
   };
 
   const choose = product => {
+    clearTimeout(timer);
+    requestNumber++;
     qs('.product-id', row).value = product.id;
     input.value = product.english_name;
     input.setCustomValidity('');
@@ -312,6 +314,15 @@ function bindProductSearch(row) {
           received.focus();
           received.select();
         }
+      } else if (qs('.product-id', row).value) {
+        clearTimeout(timer);
+        requestNumber++;
+        menu.innerHTML = '';
+        results = [];
+        active = -1;
+        const quantity = qs('.qty', row);
+        quantity.focus();
+        quantity.select();
       } else if (results.length) {
         choose(results[active >= 0 ? active : 0]);
       } else {
