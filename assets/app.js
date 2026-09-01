@@ -228,7 +228,7 @@ function bindProductSearch(row) {
     qs('.product-id', row).value = '';
     qs('.tamil-name', row).value = '';
     qs('.unit', row).value = '';
-    qs('.rate', row).value = '';
+    qs('.rate', row).value = product.default_rate ?? '';
     qs('.amount', row).value = '0.00';
     input.setCustomValidity('');
     hidePriceHistory();
