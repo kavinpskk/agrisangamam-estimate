@@ -606,8 +606,7 @@ function billPdfOptions(filename) {
     filename,
     image: { type: 'jpeg', quality: .98 },
     html2canvas: { scale: 2.5, useCORS: true, backgroundColor: '#ffffff', logging: false },
-    jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all'], avoid: ['.bill-print', '.bill-paper', 'tr'] }
+    jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
   };
 }
 
