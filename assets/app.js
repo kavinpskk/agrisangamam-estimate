@@ -656,12 +656,19 @@ async function createSinglePageBillPdf() {
   });
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  const maxWidth = pageWidth - 10;
-  const maxHeight = pageHeight - 10;
+  // Keep the complete bill inside the conservative printable area used by
+  // older A5 laser printers (including the HP LaserJet 1020).  A larger
+  // reserve on the right prevents the Amount column being clipped when the
+  // printer driver positions half-A4 stock slightly off-centre.
+  const leftMargin = 5;
+  const rightMargin = 23;
+  const verticalMargin = 7;
+  const maxWidth = pageWidth - leftMargin - rightMargin;
+  const maxHeight = pageHeight - (verticalMargin * 2);
   const scale = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
   const width = canvas.width * scale;
   const height = canvas.height * scale;
-  const x = (pageWidth - width) / 2;
+  const x = leftMargin;
   const y = (pageHeight - height) / 2;
   pdf.addImage(canvas, 'JPEG', x, y, width, height, undefined, 'FAST');
   return pdf;
