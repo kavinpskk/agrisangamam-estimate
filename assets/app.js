@@ -363,7 +363,13 @@ document.addEventListener('DOMContentLoaded', () => {
     printButton.type = 'button';
     printButton.dataset.printBill = '1';
     printButton.textContent = 'Print A5';
-    printButton.addEventListener('click', () => window.print());
+    printButton.addEventListener('click', () => {
+      const downloadButton = qsa('button', billToolbar).find(button =>
+        button.getAttribute('onclick')?.startsWith('downloadBillPdf(')
+      );
+      const match = downloadButton?.getAttribute('onclick')?.match(/downloadBillPdf\('([^']+)'\)/);
+      printBillPdf(match?.[1] || 'SGAS-Bill.pdf');
+    });
     billToolbar.insertBefore(printButton, billToolbar.firstChild);
   }
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
@@ -668,6 +674,24 @@ async function createSinglePageBillPdf(layout = 'center') {
   const y = rightFeed ? 5 : (pageHeight - height) / 2;
   pdf.addImage(canvas, 'JPEG', x, y, width, height, undefined, 'FAST');
   return pdf;
+}
+
+async function printBillPdf(filename) {
+  const printWindow = window.open('', '_blank');
+  try {
+    const pdf = await createSinglePageBillPdf();
+    if (typeof pdf.autoPrint === 'function') pdf.autoPrint();
+    const pdfUrl = pdf.output('bloburl');
+    if (printWindow) {
+      printWindow.location.replace(pdfUrl);
+    } else {
+      pdf.save(filename);
+    }
+  } catch (error) {
+    console.error(error);
+    if (printWindow) printWindow.close();
+    window.print();
+  }
 }
 
 async function downloadBillPdf(filename) {
