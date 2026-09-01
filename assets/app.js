@@ -437,6 +437,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = qs('#bill-form');
   let dirty = false;
   let submitting = false;
+  form?.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' || event.isComposing) return;
+    const target = event.target;
+    const row = target.closest?.('.item-row');
+    if (!row) return;
+
+    if (target.classList.contains('qty')) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if (!validateProductRow(row)) return;
+      const rate = qs('.rate', row);
+      rate.focus();
+      rate.select();
+      return;
+    }
+
+    if (target.classList.contains('rate')) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      hidePriceHistory();
+      focusNextProduct(row);
+      return;
+    }
+
+    if (target.classList.contains('product-search') && !target.value.trim()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      qs('.suggestions', row).innerHTML = '';
+      const received = qs('#bill-received');
+      received?.focus();
+      received?.select();
+    }
+  }, true);
   form?.addEventListener('input', () => { dirty = true; });
   form?.addEventListener('change', () => { dirty = true; });
   form?.addEventListener('submit', event => {
