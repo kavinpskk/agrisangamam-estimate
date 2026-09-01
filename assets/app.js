@@ -355,7 +355,7 @@ function bindProductSearch(row) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20260901-5')) billCss.href = 'assets/bill.css?v=20260901-5';
+  if (billCss && !billCss.href.includes('v=20260901-6')) billCss.href = 'assets/bill.css?v=20260901-6';
   const billPrint = qs('.bill-print');
   const billToolbar = billPrint?.previousElementSibling;
   if (billToolbar?.classList.contains('actions') && !qs('[data-print-bill]', billToolbar)) {
@@ -366,23 +366,6 @@ document.addEventListener('DOMContentLoaded', () => {
     printButton.addEventListener('click', () => window.print());
     billToolbar.insertBefore(printButton, billToolbar.firstChild);
   }
-  if (billToolbar?.classList.contains('actions') && !qs('[data-right-feed-bill]', billToolbar)) {
-    const downloadButton = qsa('button', billToolbar).find(button =>
-      button.getAttribute('onclick')?.startsWith('downloadBillPdf(')
-    );
-    if (downloadButton) {
-      const rightFeedButton = document.createElement('button');
-      rightFeedButton.type = 'button';
-      rightFeedButton.dataset.rightFeedBill = '1';
-      rightFeedButton.textContent = 'A5 Right-Feed PDF';
-      rightFeedButton.addEventListener('click', () => {
-        const match = downloadButton.getAttribute('onclick')?.match(/downloadBillPdf\('([^']+)'\)/);
-        if (match) downloadRightFeedBillPdf(match[1]);
-      });
-      downloadButton.insertAdjacentElement('afterend', rightFeedButton);
-    }
-  }
-
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
 
   const search = qs('#bill-customer-search');
@@ -685,16 +668,6 @@ async function createSinglePageBillPdf(layout = 'center') {
   const y = rightFeed ? 5 : (pageHeight - height) / 2;
   pdf.addImage(canvas, 'JPEG', x, y, width, height, undefined, 'FAST');
   return pdf;
-}
-
-async function downloadRightFeedBillPdf(filename) {
-  try {
-    const pdf = await createSinglePageBillPdf('right-feed');
-    pdf.save(filename.replace(/\.pdf$/i, '-Right-Feed.pdf'));
-  } catch (error) {
-    console.error(error);
-    window.print();
-  }
 }
 
 async function downloadBillPdf(filename) {
