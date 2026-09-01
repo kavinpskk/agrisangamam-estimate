@@ -78,6 +78,22 @@ function validateProductRow(row, focusInvalid = true) {
 }
 
 function focusNextProduct(row) {
+  const productInput = qs('.product-search', row);
+  const productId = qs('.product-id', row).value;
+  if (!productId) {
+    productInput.setCustomValidity('Select a product before continuing.');
+    productInput.focus();
+    productInput.reportValidity();
+    return;
+  }
+  const rateInput = qs('.rate', row);
+  if (rateInput.value.trim() === '') {
+    rateInput.setCustomValidity('Enter the rate before continuing.');
+    rateInput.focus();
+    rateInput.reportValidity();
+    return;
+  }
+  rateInput.setCustomValidity('');
   if (!validateProductRow(row)) return;
   const rows = qsa('.item-row');
   let next = rows[rows.indexOf(row) + 1];
@@ -457,6 +473,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (target.classList.contains('qty')) {
       event.preventDefault();
       event.stopImmediatePropagation();
+      if (!qs('.product-id', row).value) {
+        const product = qs('.product-search', row);
+        product.setCustomValidity('Select a product before entering quantity.');
+        product.focus();
+        product.reportValidity();
+        return;
+      }
       if (!validateProductRow(row)) return;
       const rate = qs('.rate', row);
       rate.focus();
