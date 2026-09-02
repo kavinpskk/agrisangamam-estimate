@@ -17,7 +17,7 @@ function hidePriceHistory() {
 }
 
 function recalc() {
-  let total = 0;
+  let itemTotal = 0;
 
   qsa('.item-row').forEach((row, index) => {
     qs('.row-number', row).textContent = index + 1;
@@ -32,8 +32,11 @@ function recalc() {
 
     const amount = selected && qty > 0 && rate >= 0 ? roundMoney(qty * rate) : 0;
     qs('.amount', row).value = money(amount);
-    total = roundMoney(total + amount);
+    itemTotal = roundMoney(itemTotal + amount);
   });
+
+  const total = Math.round(itemTotal);
+  const roundOff = roundMoney(total - itemTotal);
 
   const customer = qs('#bill-customer');
   const previous = Number(customer?.dataset.balance) || 0;
@@ -45,6 +48,7 @@ function recalc() {
   }
   if (qs('#previous-balance')) qs('#previous-balance').textContent = money(previous);
   if (qs('#subtotal')) qs('#subtotal').textContent = money(total);
+  if (qs('#round-off')) qs('#round-off').textContent = (roundOff >= 0 ? '+' : '') + money(roundOff);
   if (qs('#closing-balance')) qs('#closing-balance').textContent = money(roundMoney(previous + total - received));
   return total;
 }
@@ -101,6 +105,7 @@ function focusNextProduct(row) {
   const nextProduct = next && qs('.product-search', next);
   if (nextProduct) {
     setTimeout(() => {
+      next.scrollIntoView({ behavior: 'smooth', block: 'center' });
       nextProduct.focus();
       nextProduct.select();
     }, 0);
@@ -169,7 +174,8 @@ function addRow(data = {}, focus = false) {
     productInput.value = data.english_name || '';
     qs('.tamil-name', row).value = data.tamil_name || '';
     qs('.unit', row).value = data.unit || '';
-    qs('.rate', row).value = data.default_rate ?? '';
+    quantityInput.value = data.quantity ?? 1;
+    qs('.rate', row).value = data.rate ?? data.default_rate ?? '';
   }
 
   qsa('input', row).forEach(input => input.addEventListener('input', () => {
@@ -356,6 +362,8 @@ function bindProductSearch(row) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const appCss = qs('link[href^="assets/app.css"]');
+  if (appCss && !appCss.href.includes('v=20260902-37')) appCss.href = 'assets/app.css?v=20260902-37';
   const billCss = qs('link[href^="assets/bill.css"]');
   if (billCss && !billCss.href.includes('v=20260902-10')) billCss.href = 'assets/bill.css?v=20260902-10';
   const billPrint = qs('.bill-print');
@@ -370,6 +378,14 @@ document.addEventListener('DOMContentLoaded', () => {
     billToolbar.insertBefore(printButton, billToolbar.firstChild);
   }
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
+  const subtotal = qs('#subtotal');
+  if (subtotal && !qs('#round-off')) {
+    const box = subtotal.closest('div');
+    const roundBox = document.createElement('div');
+    roundBox.innerHTML = '<small>Round Off</small><b>₹<span id="round-off">+0.00</span></b>';
+    box?.after(roundBox);
+    recalc();
+  }
 
   const search = qs('#bill-customer-search');
   const customer = qs('#bill-customer');
