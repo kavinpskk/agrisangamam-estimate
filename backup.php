@@ -220,6 +220,7 @@ try {
 <a href="index.php?page=categories">Categories</a>
 <a href="index.php?page=whatsapp_reminders">WhatsApp</a>
 <a href="index.php?page=reports">Reports</a>
+<a href="index.php?page=settings">Settings</a>
 <a class="active" href="backup.php">Backup</a>
 <a href="index.php?page=logout">Logout</a>
 </nav>
