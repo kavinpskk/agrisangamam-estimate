@@ -355,8 +355,9 @@ function bindProductSearch(row) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20260901-6')) billCss.href = 'assets/bill.css?v=20260901-6';
+  if (billCss && !billCss.href.includes('v=20260902-7')) billCss.href = 'assets/bill.css?v=20260902-7';
   const billPrint = qs('.bill-print');
+  if (billPrint) paginateBillPreview();
   const billToolbar = billPrint?.previousElementSibling;
   if (billToolbar?.classList.contains('actions') && !qs('[data-print-bill]', billToolbar)) {
     const printButton = document.createElement('button');
@@ -632,6 +633,42 @@ function loadPdfScript(src, ready) {
   });
 }
 
+function paginateBillPreview() {
+  const wrapper = qs('.bill-print');
+  if (!wrapper) return [];
+  const existingPages = qsa('.bill-paper', wrapper);
+  if (wrapper.dataset.paginated === '1') return existingPages;
+  const original = existingPages[0];
+  if (!original) return [];
+  const sourceRows = qsa('tbody tr:not(.bill-table-filler)', original);
+  const rowsPerPage = 25;
+  if (sourceRows.length <= rowsPerPage) {
+    wrapper.dataset.paginated = '1';
+    return [original];
+  }
+  const pageCount = Math.ceil(sourceRows.length / rowsPerPage);
+  const pages = [];
+  for (let pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+    const page = original.cloneNode(true);
+    const start = pageIndex * rowsPerPage;
+    const end = Math.min(start + rowsPerPage, sourceRows.length);
+    qsa('tbody tr:not(.bill-table-filler)', page).forEach((row, rowIndex) => {
+      if (rowIndex < start || rowIndex >= end) row.remove();
+    });
+    if (pageIndex !== pageCount - 1) {
+      qs('tfoot', page)?.remove();
+      qs('.bill-print-totals', page)?.remove();
+    }
+    page.dataset.page = String(pageIndex + 1);
+    page.dataset.pages = String(pageCount);
+    pages.push(page);
+  }
+  wrapper.replaceChildren(...pages);
+  wrapper.classList.add('multi-page');
+  wrapper.dataset.paginated = '1';
+  return pages;
+}
+
 async function createSinglePageBillPdf(layout = 'center') {
   const bill = qs('.bill-print');
   if (!bill) throw new Error('Bill preview was not found.');
@@ -645,14 +682,8 @@ async function createSinglePageBillPdf(layout = 'center') {
   );
   if (document.fonts?.ready) await document.fonts.ready;
 
-  const canvas = await window.html2canvas(bill, {
-    scale: 2.5,
-    useCORS: true,
-    backgroundColor: '#ffffff',
-    logging: false,
-    scrollX: 0,
-    scrollY: 0
-  });
+  const pages = paginateBillPreview();
+  if (!pages.length) throw new Error('Bill pages were not found.');
   const pdf = new window.jspdf.jsPDF({
     unit: 'mm',
     format: 'a5',
@@ -660,19 +691,21 @@ async function createSinglePageBillPdf(layout = 'center') {
     compress: true
   });
   const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-  const rightFeed = layout === 'right-feed';
-  const leftMargin = rightFeed ? 0.5 : 5;
-  const rightMargin = rightFeed ? pageWidth - 104.5 : 5;
-  const verticalMargin = rightFeed ? 7 : 5;
-  const maxWidth = pageWidth - leftMargin - rightMargin;
-  const maxHeight = pageHeight - (verticalMargin * 2);
-  const scale = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
-  const width = canvas.width * scale;
-  const height = canvas.height * scale;
-  const x = rightFeed ? leftMargin : (pageWidth - width) / 2;
-  const y = rightFeed ? 5 : (pageHeight - height) / 2;
-  pdf.addImage(canvas, 'JPEG', x, y, width, height, undefined, 'FAST');
+  for (let index = 0; index < pages.length; index++) {
+    const canvas = await window.html2canvas(pages[index], {
+      scale: 2.5,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      scrollX: 0,
+      scrollY: 0
+    });
+    if (index > 0) pdf.addPage('a5', 'portrait');
+    const width = 136;
+    const height = 198;
+    const x = layout === 'right-feed' ? 0.5 : (pageWidth - width) / 2;
+    pdf.addImage(canvas, 'JPEG', x, 5, width, height, undefined, 'FAST');
+  }
   return pdf;
 }
 
