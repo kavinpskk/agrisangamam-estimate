@@ -1,4 +1,15 @@
 /* Approved SGAS A5 portrait print design. */
+.bill-form .suggestions button:hover,
+.bill-form .suggestions button.active {
+  background: linear-gradient(135deg, #17794b, #0e633c) !important;
+  color: #fff !important;
+  box-shadow: inset 5px 0 0 #f0bd52 !important;
+  transform: none !important;
+}
+.bill-form .suggestions button:hover strong,
+.bill-form .suggestions button.active strong { color: #fff !important; }
+.bill-form .suggestions button:hover small,
+.bill-form .suggestions button.active small { color: #d8eee2 !important; }
 .bill-print{box-sizing:border-box!important;width:136mm!important;max-width:136mm!important;height:198mm!important;min-height:198mm!important;margin:18px auto!important;padding:0!important;overflow:hidden!important;border:0!important;border-radius:0!important;background:#fff!important;box-shadow:0 8px 28px rgba(0,0,0,.09)!important;color:#050505!important;font-family:Arial,"Arial Narrow","Noto Sans Tamil","Latha",sans-serif!important;-webkit-font-smoothing:antialiased!important;text-rendering:geometricPrecision!important}
 .bill-paper{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;width:136mm!important;height:198mm!important;overflow:hidden!important;border:.25mm solid #111!important;background:#fff!important;font-weight:700!important}
 .bill-paper-title{box-sizing:border-box!important;display:flex!important;flex:0 0 9mm!important;align-items:center!important;justify-content:center!important;border-bottom:.25mm solid #111!important}
