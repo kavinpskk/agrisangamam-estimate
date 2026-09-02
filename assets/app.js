@@ -366,11 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
     printButton.type = 'button';
     printButton.dataset.printBill = '1';
     printButton.textContent = 'Print A5';
-    printButton.addEventListener('click', async () => {
-      paginateBillPreview();
-      if (document.fonts?.ready) await document.fonts.ready;
-      window.print();
-    });
+    printButton.addEventListener('click', printBillPdf);
     billToolbar.insertBefore(printButton, billToolbar.firstChild);
   }
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
@@ -719,6 +715,38 @@ async function downloadBillPdf(filename) {
     pdf.save(filename);
   } catch (error) {
     console.error(error);
+    window.print();
+  }
+}
+
+async function printBillPdf() {
+  let frame;
+  let url;
+  try {
+    const pdf = await createSinglePageBillPdf();
+    url = URL.createObjectURL(pdf.output('blob'));
+    frame = document.createElement('iframe');
+    frame.setAttribute('aria-hidden', 'true');
+    frame.style.cssText = 'position:fixed;width:1px;height:1px;right:0;bottom:0;border:0;opacity:0;pointer-events:none';
+    frame.onload = () => setTimeout(() => {
+      try {
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+      } catch (error) {
+        console.error(error);
+        window.open(url, '_blank');
+      }
+      setTimeout(() => {
+        frame.remove();
+        URL.revokeObjectURL(url);
+      }, 60000);
+    }, 800);
+    frame.src = url;
+    document.body.appendChild(frame);
+  } catch (error) {
+    console.error(error);
+    frame?.remove();
+    if (url) URL.revokeObjectURL(url);
     window.print();
   }
 }
