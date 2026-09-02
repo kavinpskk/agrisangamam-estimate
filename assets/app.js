@@ -378,6 +378,14 @@ document.addEventListener('DOMContentLoaded', () => {
     billToolbar.insertBefore(printButton, billToolbar.firstChild);
   }
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
+  if (window.__editingBill) {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    requestAnimationFrame(() => {
+      document.activeElement?.blur();
+      window.scrollTo(0, 0);
+    });
+    setTimeout(() => window.scrollTo(0, 0), 120);
+  }
   const subtotal = qs('#subtotal');
   if (subtotal && !qs('#round-off')) {
     const box = subtotal.closest('div');
