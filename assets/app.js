@@ -160,6 +160,8 @@ function addRow(data = {}, focus = false) {
   const row = template.content.firstElementChild.cloneNode(true);
   box.appendChild(row);
   const productInput = qs('.product-search', row);
+  const quantityInput = qs('.qty', row);
+  quantityInput.inputMode = 'decimal';
   productInput.required = false;
 
   if (data.product_id) {
@@ -175,7 +177,7 @@ function addRow(data = {}, focus = false) {
     recalc();
   }));
 
-  qs('.qty', row).addEventListener('keydown', event => {
+  quantityInput.addEventListener('keydown', event => {
     if (event.key === 'Enter') {
       event.preventDefault();
       event.stopPropagation();
