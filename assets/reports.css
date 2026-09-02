@@ -11,6 +11,19 @@
   margin: 0;
 }
 
+.reports-heading h1 {
+  margin-top: 4px;
+  font-size: 30px;
+  letter-spacing: -.6px;
+}
+
+.reports-kicker {
+  color: var(--brand);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 1.3px;
+}
+
 .reports-heading p {
   margin-top: 6px;
   color: var(--muted);
@@ -35,28 +48,72 @@
 .report-tabs {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .report-tab {
-  display: block;
-  padding: 13px 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 15px 16px;
   border: 1px solid var(--line);
-  border-radius: 11px;
+  border-radius: 14px;
   background: #fff;
   color: var(--ink);
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 750;
+  text-align: left;
   box-shadow: 0 5px 18px rgba(16, 69, 43, .05);
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
 
-.report-tab span {
-  display: block;
-  margin-top: 5px;
+.report-tab:hover {
+  transform: translateY(-1px);
+  border-color: #afd3bf;
+}
+
+.report-tab.active {
+  border-color: var(--brand);
+  background: linear-gradient(135deg, #f4fbf7, #fff);
+  box-shadow: 0 8px 22px rgba(16, 105, 62, .12), inset 0 0 0 1px var(--brand);
+}
+
+.report-tab-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: #e9f5ee;
   color: var(--brand);
   font-size: 18px;
+  font-weight: 900;
+}
+
+.report-tab > span:not(.report-tab-icon) {
+  display: block;
+}
+
+.report-tab b,
+.report-tab small {
+  display: block;
+}
+
+.report-tab b {
+  font-size: 13px;
+}
+
+.report-tab small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.report-tab strong {
+  color: var(--brand);
+  font-size: 16px;
   font-weight: 850;
 }
 
@@ -88,8 +145,13 @@
   font-size: 23px;
 }
 
-.report-section {
+.page-reports .report-section {
+  display: none;
   scroll-margin-top: 20px;
+}
+
+.page-reports .report-section.active {
+  display: block;
 }
 
 .report-section-head {
