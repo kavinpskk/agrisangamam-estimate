@@ -82,5 +82,5 @@ CREATE TABLE IF NOT EXISTS payments (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO settings (setting_key, setting_value) VALUES
-('shop_name','SGAS'),('next_bill_no','1'),('reminder_tamil','வணக்கம் {name}, உங்கள் SGAS கணக்கில் செலுத்த வேண்டிய நிலுவைத் தொகை ₹{balance} உள்ளது. நன்றி — SGAS')
+('shop_name','SGAS'),('bill_header','SGAS'),('business_address',''),('business_mobile',''),('business_email',''),('next_bill_no','1'),('bill_prefix',''),('show_previous_balance','1'),('show_amount_received','1'),('default_unit','Nos'),('print_language','tamil'),('payment_methods','["Cash","UPI","Bank Transfer","Cheque"]'),('default_payment_method','Cash'),('upi_id',''),('receipt_prefix','PAY'),('reminder_tamil','வணக்கம் {name}, உங்கள் SGAS கணக்கில் செலுத்த வேண்டிய நிலுவைத் தொகை ₹{balance} உள்ளது. நன்றி — SGAS'),('bill_share_message','Hello {name}, your SGAS bill is attached.'),('payment_receipt_message','Hello {name}, we received ₹{amount}. Thank you.'),('country_code','91'),('brand_color','#0b432a'),('sidebar_mode','normal'),('mobile_menu','collapsed')
 ON DUPLICATE KEY UPDATE setting_value=setting_value;
