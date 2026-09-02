@@ -368,6 +368,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (billCss && !billCss.href.includes('v=20260902-10')) billCss.href = 'assets/bill.css?v=20260902-10';
   const billPrint = qs('.bill-print');
   if (billPrint) paginateBillPreview();
+  qsa('.bill-items-print tbody tr:not(.bill-table-filler) td:nth-child(2)').forEach(cell => {
+    const rate = Number(cell.textContent.replaceAll(',', '').trim());
+    if (!Number.isFinite(rate)) return;
+    cell.textContent = rate.toLocaleString('en-IN', Number.isInteger(rate)
+      ? { minimumFractionDigits: 0, maximumFractionDigits: 0 }
+      : { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  });
   const billToolbar = billPrint?.previousElementSibling;
   if (billToolbar?.classList.contains('actions') && !qs('[data-print-bill]', billToolbar)) {
     const printButton = document.createElement('button');
