@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const appCss = qs('link[href^="assets/app.css"]');
   if (appCss && !appCss.href.includes('v=20260902-37')) appCss.href = 'assets/app.css?v=20260902-37';
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20260902-10')) billCss.href = 'assets/bill.css?v=20260902-10';
+  if (billCss && !billCss.href.includes('v=20260902-11')) billCss.href = 'assets/bill.css?v=20260902-11';
   const billPrint = qs('.bill-print');
   if (billPrint) paginateBillPreview();
   qsa('.bill-items-print tbody tr:not(.bill-table-filler) td:nth-child(2)').forEach(cell => {
