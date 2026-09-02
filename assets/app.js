@@ -357,7 +357,7 @@ function bindProductSearch(row) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20260902-9')) billCss.href = 'assets/bill.css?v=20260902-9';
+  if (billCss && !billCss.href.includes('v=20260902-10')) billCss.href = 'assets/bill.css?v=20260902-10';
   const billPrint = qs('.bill-print');
   if (billPrint) paginateBillPreview();
   const billToolbar = billPrint?.previousElementSibling;
@@ -366,12 +366,10 @@ document.addEventListener('DOMContentLoaded', () => {
     printButton.type = 'button';
     printButton.dataset.printBill = '1';
     printButton.textContent = 'Print A5';
-    printButton.addEventListener('click', () => {
-      const downloadButton = qsa('button', billToolbar).find(button =>
-        button.getAttribute('onclick')?.startsWith('downloadBillPdf(')
-      );
-      const match = downloadButton?.getAttribute('onclick')?.match(/downloadBillPdf\('([^']+)'\)/);
-      downloadBillPdf(match?.[1] || 'SGAS-Bill.pdf');
+    printButton.addEventListener('click', async () => {
+      paginateBillPreview();
+      if (document.fonts?.ready) await document.fonts.ready;
+      window.print();
     });
     billToolbar.insertBefore(printButton, billToolbar.firstChild);
   }
