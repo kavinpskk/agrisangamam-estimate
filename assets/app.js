@@ -357,7 +357,7 @@ function bindProductSearch(row) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20260902-7')) billCss.href = 'assets/bill.css?v=20260902-7';
+  if (billCss && !billCss.href.includes('v=20260902-8')) billCss.href = 'assets/bill.css?v=20260902-8';
   const billPrint = qs('.bill-print');
   if (billPrint) paginateBillPreview();
   const billToolbar = billPrint?.previousElementSibling;
