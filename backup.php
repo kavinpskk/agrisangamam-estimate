@@ -16,17 +16,6 @@ function sql_value(PDO $pdo, mixed $value): string {
     return $pdo->quote((string)$value);
 }
 
-function backup_authorized(): bool {
-    return (int)($_SESSION['backup_authorized_until'] ?? 0) >= time();
-}
-
-function require_backup_authorization(): void {
-    if (!backup_authorized()) {
-        http_response_code(403);
-        exit('Backup authorization expired. Return to Backup & Export and verify the administrator password again.');
-    }
-}
-
 function build_database_backup(PDO $pdo): array {
     $tables = ['settings','categories','products','customers','bills','bill_items','payments'];
     $sql = "-- SGAS database backup\n";
@@ -65,7 +54,6 @@ function build_database_backup(PDO $pdo): array {
 }
 
 function download_database_backup(PDO $pdo): never {
-    require_backup_authorization();
     $backup = build_database_backup($pdo);
     header('Cache-Control: no-store, private');
     header('Content-Type: '.$backup['mime']);
@@ -77,7 +65,6 @@ function download_database_backup(PDO $pdo): never {
 }
 
 function save_drive_settings(PDO $pdo, string $url, string $token): void {
-    require_backup_authorization();
     $url = trim($url);
     $token = trim($token);
     if (!preg_match('#^https://script\\.google\\.com/macros/s/[A-Za-z0-9_-]+/exec$#', $url)) {
@@ -92,7 +79,6 @@ function save_drive_settings(PDO $pdo, string $url, string $token): void {
 }
 
 function upload_database_backup(PDO $pdo): array {
-    require_backup_authorization();
     if (!function_exists('curl_init')) throw new RuntimeException('Server cURL support is required for Google Drive upload.');
     $url = setting($pdo, 'google_drive_backup_url');
     $token = setting($pdo, 'google_drive_backup_token');
@@ -132,7 +118,6 @@ function upload_database_backup(PDO $pdo): array {
 }
 
 function download_csv(PDO $pdo, string $type): never {
-    require_backup_authorization();
     $exports = [
         'customers' => ['customers.csv', 'SELECT id,name,mobile,address,opening_balance,created_at FROM customers ORDER BY name'],
         'products' => ['products.csv', 'SELECT p.id,c.name category,p.english_name,p.tamil_name,p.unit,p.default_rate,p.active,p.created_at FROM products p LEFT JOIN categories c ON c.id=p.category_id ORDER BY p.english_name'],
@@ -166,18 +151,6 @@ $backupError = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     check_csrf();
     $action = (string)($_POST['action'] ?? '');
-    if ($action === 'unlock') {
-        $stmt = $pdo->prepare('SELECT password_hash FROM users WHERE id=?');
-        $stmt->execute([(int)$_SESSION['user_id']]);
-        $hash = (string)$stmt->fetchColumn();
-        if ($hash !== '' && password_verify((string)($_POST['password'] ?? ''), $hash)) {
-            session_regenerate_id(true);
-            $_SESSION['backup_authorized_until'] = time() + 300;
-            header('Location: backup.php');
-            exit;
-        }
-        $backupError = 'Administrator password is incorrect.';
-    }
     try {
         if ($action === 'database') download_database_backup($pdo);
         if ($action === 'csv') download_csv($pdo, (string)($_POST['type'] ?? ''));
@@ -265,17 +238,6 @@ try {
 <div class="card"><small>Database size</small><strong><?=$dbSize ? e(number_format($dbSize/1048576, 2)).' MB' : 'Available'?></strong></div>
 </section>
 
-<?php if (!backup_authorized()): ?>
-<section class="card backup-unlock">
-<div><span class="backup-icon">LOCK</span><div><h2>Verify administrator password</h2><p>Customer and billing data is protected. Re-enter your password to enable downloads for five minutes.</p></div></div>
-<form method="post" autocomplete="off">
-<input type="hidden" name="csrf" value="<?=csrf()?>">
-<input type="hidden" name="action" value="unlock">
-<label for="backup-password">Administrator password</label>
-<div><input id="backup-password" type="password" name="password" required autocomplete="current-password"><button type="submit">Unlock Backups</button></div>
-</form>
-</section>
-<?php else: ?>
 <section class="card backup-primary">
 <div><span class="backup-icon">DB</span><div><h2>Complete business-data backup</h2><p>Includes customers, products, categories, bills, bill items, payments and settings. Administrator password records are excluded for security.</p></div></div>
 <form method="post">
@@ -332,7 +294,6 @@ try {
 <div class="safety-note"><b>Restore safety</b><p>Restoration is intentionally not automatic. Import the SQL backup through phpMyAdmin only after confirming the target database and taking a fresh safety backup.</p></div>
 </div>
 </section>
-<?php endif; ?>
 </main>
 <script src="assets/app.js?v=20260901-49"></script>
 </body>
