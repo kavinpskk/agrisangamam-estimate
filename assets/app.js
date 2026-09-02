@@ -640,7 +640,8 @@ function paginateBillPreview() {
   if (wrapper.dataset.paginated === '1') return existingPages;
   const original = existingPages[0];
   if (!original) return [];
-  const sourceRows = qsa('tbody tr:not(.bill-table-filler)', original);
+  const isItemRow = row => /^\d+$/.test(qs('td:first-child', row)?.textContent.trim() || '');
+  const sourceRows = qsa('tbody tr', original).filter(isItemRow);
   const rowsPerPage = 25;
   if (sourceRows.length <= rowsPerPage) {
     wrapper.dataset.paginated = '1';
@@ -652,8 +653,11 @@ function paginateBillPreview() {
     const page = original.cloneNode(true);
     const start = pageIndex * rowsPerPage;
     const end = Math.min(start + rowsPerPage, sourceRows.length);
-    qsa('tbody tr:not(.bill-table-filler)', page).forEach((row, rowIndex) => {
-      if (rowIndex < start || rowIndex >= end) row.remove();
+    let itemIndex = 0;
+    qsa('tbody tr', page).forEach(row => {
+      if (!isItemRow(row)) return;
+      if (itemIndex < start || itemIndex >= end) row.remove();
+      itemIndex++;
     });
     if (pageIndex !== pageCount - 1) {
       qs('tfoot', page)?.remove();
