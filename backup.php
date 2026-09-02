@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
-require __DIR__.'/bootstrap.php';
+require_once __DIR__.'/bootstrap.php';
+$backupEmbedded = defined('SGAS_BACKUP_EMBEDDED') && SGAS_BACKUP_EMBEDDED;
 
 if (!logged_in()) {
     header('Location: index.php?page=login');
@@ -235,33 +236,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'configure_drive') {
             save_drive_settings($pdo, (string)($_POST['drive_url'] ?? ''), (string)($_POST['drive_token'] ?? ''));
             $_SESSION['backup_success'] = 'Google Drive backup connected successfully.';
-            header('Location: backup.php');
+            header('Location: index.php?page=settings&tab=backup');
             exit;
         }
         if ($action === 'drive_backup') {
             $result = upload_database_backup($pdo);
             $_SESSION['backup_success'] = 'Backup uploaded to Google Drive: '.(string)$result['filename'];
-            header('Location: backup.php');
+            header('Location: index.php?page=settings&tab=backup');
             exit;
         }
         if ($action === 'import_offline') {
             if (($_POST['confirm_import'] ?? '') !== 'yes') throw new RuntimeException('Confirm that you created a fresh backup before importing.');
             $result = import_sgas_sql($pdo, $_FILES['import_file'] ?? []);
             $_SESSION['backup_success'] = 'Offline data imported successfully: '.number_format($result['customers']).' customers, '.number_format($result['products']).' products, '.number_format($result['bills']).' bills and '.number_format($result['payments']).' payments. Closing outstanding ₹'.number_format($result['closing_balance'], 2).'.';
-            header('Location: backup.php');
+            header('Location: index.php?page=settings&tab=backup');
             exit;
         }
     } catch (Throwable $e) {
         $backupError = $e->getMessage();
     }
     if ($backupError === '') {
-        http_response_code(400);
-        exit('Invalid backup action.');
+        $backupError = 'Invalid backup action.';
     }
+    $_SESSION['backup_error'] = $backupError;
+    header('Location: index.php?page=settings&tab=backup');
+    exit;
 }
 
 $backupSuccess = (string)($_SESSION['backup_success'] ?? '');
 unset($_SESSION['backup_success']);
+$backupError = (string)($_SESSION['backup_error'] ?? $backupError);
+unset($_SESSION['backup_error']);
+
+if (!$backupEmbedded) {
+    header('Location: index.php?page=settings&tab=backup');
+    exit;
+}
 $driveUrl = setting($pdo, 'google_drive_backup_url');
 $driveConnected = $driveUrl !== '' && setting($pdo, 'google_drive_backup_token') !== '';
 
@@ -280,36 +290,7 @@ try {
     $dbSize = 0;
 }
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b432a">
-<title>Backup & Export — SGAS</title>
-<link rel="stylesheet" href="assets/app.css?v=20260831-36">
-<link rel="stylesheet" href="assets/sidebar.css?v=20260831-2">
-<link rel="stylesheet" href="assets/backup.css?v=20260902-3">
-</head>
-<body class="page-backup">
-<button type="button" class="menu-toggle no-print" aria-label="Open menu" aria-expanded="false">☰</button>
-<nav class="no-print">
-<strong>SGAS</strong>
-<a href="index.php">Dashboard</a>
-<a href="index.php?page=new_bill">New Bill</a>
-<a href="index.php?page=bills">Bills</a>
-<a href="index.php?page=customers">Customers</a>
-<a href="index.php?page=ledger">Ledger</a>
-<a href="index.php?page=payments">Payments</a>
-<a href="index.php?page=products">Products</a>
-<a href="index.php?page=categories">Categories</a>
-<a href="index.php?page=whatsapp_reminders">WhatsApp</a>
-<a href="index.php?page=reports">Reports</a>
-<a href="index.php?page=settings">Settings</a>
-<a class="active" href="backup.php">Backup</a>
-<a href="index.php?page=logout">Logout</a>
-</nav>
-<main class="wrap backup-page">
+<div class="backup-page">
 <?php if ($backupError !== ''): ?><div class="notice error"><?=e($backupError)?></div><?php endif; ?>
 <?php if ($backupSuccess !== ''): ?><div class="notice"><?=e($backupSuccess)?></div><?php endif; ?>
 <header class="backup-heading">
@@ -326,7 +307,7 @@ try {
 
 <section class="card backup-primary">
 <div><span class="backup-icon">DB</span><div><h2>Complete business-data backup</h2><p>Includes customers, products, categories, bills, bill items, payments and settings. Administrator password records are excluded for security.</p></div></div>
-<form method="post">
+<form method="post" action="backup.php">
 <input type="hidden" name="csrf" value="<?=csrf()?>">
 <input type="hidden" name="action" value="database">
 <button type="submit">Download Database Backup</button>
@@ -336,13 +317,13 @@ try {
 <section class="card drive-card">
 <div><span class="backup-icon">GD</span><div><h2>Google Drive backup</h2><p><?= $driveConnected ? 'Send the current database backup directly to the SGAS Backups folder.' : 'Connect the secure Apps Script endpoint to enable one-click Drive backups.' ?></p></div></div>
 <?php if ($driveConnected): ?>
-<form method="post">
+<form method="post" action="backup.php">
 <input type="hidden" name="csrf" value="<?=csrf()?>">
 <input type="hidden" name="action" value="drive_backup">
 <button type="submit">Backup to Google Drive</button>
 </form>
 <?php else: ?>
-<form method="post" class="drive-connect-form" autocomplete="off">
+<form method="post" action="backup.php" class="drive-connect-form" autocomplete="off">
 <input type="hidden" name="csrf" value="<?=csrf()?>">
 <input type="hidden" name="action" value="configure_drive">
 <label>Apps Script web-app URL<input type="url" name="drive_url" required placeholder="https://script.google.com/macros/s/.../exec"></label>
@@ -354,7 +335,7 @@ try {
 
 <section class="card import-card">
 <div class="import-copy"><span class="backup-icon">IN</span><div><h2>Import offline financial-year data</h2><p>Upload the converted SGAS 2026-27 SQL file. This replaces existing categories, products, customers, bills and payments after validating the complete file and closing balance.</p></div></div>
-<form method="post" enctype="multipart/form-data" class="import-form" onsubmit="return confirm('Importing will replace the current business data. Continue?')">
+<form method="post" action="backup.php" enctype="multipart/form-data" class="import-form" onsubmit="return confirm('Importing will replace the current business data. Continue?')">
 <input type="hidden" name="csrf" value="<?=csrf()?>">
 <input type="hidden" name="action" value="import_offline">
 <label class="file-field"><span>Converted SGAS SQL file</span><input type="file" name="import_file" accept=".sql,application/sql,text/plain" required></label>
@@ -369,7 +350,7 @@ try {
 <p>CSV files open in Microsoft Excel and preserve Tamil text.</p>
 <div class="export-list">
 <?php foreach (['customers'=>'Customers','products'=>'Products','bills'=>'Bills','payments'=>'Payments'] as $type=>$label): ?>
-<form method="post">
+<form method="post" action="backup.php">
 <input type="hidden" name="csrf" value="<?=csrf()?>">
 <input type="hidden" name="action" value="csv">
 <input type="hidden" name="type" value="<?=e($type)?>">
@@ -391,7 +372,4 @@ try {
 <div class="safety-note"><b>Import safety</b><p>Always create a fresh backup before importing offline data. The importer validates record totals and the final customer outstanding balance before committing changes.</p></div>
 </div>
 </section>
-</main>
-<script src="assets/app.js?v=20260901-49"></script>
-</body>
-</html>
+</div>
