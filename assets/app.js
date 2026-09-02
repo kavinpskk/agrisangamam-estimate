@@ -376,6 +376,25 @@ document.addEventListener('DOMContentLoaded', () => {
     printButton.textContent = 'Print A5';
     printButton.addEventListener('click', printBillPdf);
     billToolbar.insertBefore(printButton, billToolbar.firstChild);
+    const downloadButton = qsa('button', billToolbar).find(button =>
+      button.getAttribute('onclick')?.startsWith('downloadBillPdf(')
+    );
+    const pdfName = downloadButton?.getAttribute('onclick')?.match(/downloadBillPdf\('([^']+)'\)/)?.[1] || 'SGAS-Bill.pdf';
+    const photoButton = document.createElement('button');
+    photoButton.type = 'button';
+    photoButton.dataset.shareBillPhoto = '1';
+    photoButton.textContent = 'Share Bill as Photo';
+    photoButton.addEventListener('click', async () => {
+      photoButton.disabled = true;
+      photoButton.textContent = 'Preparing Photos…';
+      try {
+        await shareBillPhotos(pdfName.replace(/\.pdf$/i, ''));
+      } finally {
+        photoButton.disabled = false;
+        photoButton.textContent = 'Share Bill as Photo';
+      }
+    });
+    billToolbar.appendChild(photoButton);
   }
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
   if (window.__editingBill) {
@@ -799,6 +818,52 @@ async function shareBillPdf(filename) {
   link.download = filename;
   link.click();
   setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+}
+
+async function shareBillPhotos(baseName = 'SGAS-Bill') {
+  try {
+    await loadPdfScript(
+      'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+      () => typeof window.html2canvas === 'function'
+    );
+    if (document.fonts?.ready) await document.fonts.ready;
+    const pages = paginateBillPreview();
+    if (!pages.length) throw new Error('Bill pages were not found.');
+    const files = [];
+    for (let index = 0; index < pages.length; index++) {
+      const canvas = await window.html2canvas(pages[index], {
+        scale: 2.5,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        scrollX: 0,
+        scrollY: 0
+      });
+      const blob = await new Promise((resolve, reject) => canvas.toBlob(
+        value => value ? resolve(value) : reject(new Error('Unable to create the bill photo.')),
+        'image/jpeg',
+        .96
+      ));
+      const suffix = pages.length > 1 ? `-Page-${index + 1}` : '';
+      files.push(new File([blob], `${baseName}${suffix}.jpg`, { type: 'image/jpeg' }));
+    }
+    if (navigator.share && navigator.canShare?.({ files })) {
+      await navigator.share({ title: baseName, text: baseName, files });
+      return;
+    }
+    files.forEach((file, index) => setTimeout(() => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(file);
+      link.download = file.name;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    }, index * 250));
+    alert('Bill photos downloaded. Open WhatsApp and attach the JPG file' + (files.length > 1 ? 's.' : '.'));
+  } catch (error) {
+    if (error?.name === 'AbortError') return;
+    console.error(error);
+    alert('Unable to prepare the bill photos. Please try again.');
+  }
 }
 
 async function downloadDocumentPdf(filename) {
