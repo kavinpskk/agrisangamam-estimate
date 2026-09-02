@@ -371,9 +371,15 @@ document.addEventListener('DOMContentLoaded', () => {
   qsa('.bill-items-print tbody tr:not(.bill-table-filler) td:nth-child(2)').forEach(cell => {
     const rate = Number(cell.textContent.replaceAll(',', '').trim());
     if (!Number.isFinite(rate)) return;
-    cell.textContent = rate.toLocaleString('en-IN', Number.isInteger(rate)
-      ? { minimumFractionDigits: 0, maximumFractionDigits: 0 }
-      : { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    cell.textContent = Number.isInteger(rate) ? String(rate) : rate.toFixed(2);
+  });
+  qsa([
+    '.bill-items-print tbody tr:not(.bill-table-filler) td:nth-child(6)',
+    '.bill-items-print tfoot td:last-child',
+    '.balance-summary td:last-child',
+    '.current-bill-total b'
+  ].join(',')).forEach(cell => {
+    cell.textContent = cell.textContent.replaceAll(',', '');
   });
   const billToolbar = billPrint?.previousElementSibling;
   if (billToolbar?.classList.contains('actions') && !qs('[data-print-bill]', billToolbar)) {
