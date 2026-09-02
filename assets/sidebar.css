@@ -79,13 +79,14 @@ nav a:nth-of-type(1)::before { content: "⌂"; }
 nav a:nth-of-type(2)::before { content: "+"; }
 nav a:nth-of-type(3)::before { content: "▤"; }
 nav a:nth-of-type(4)::before { content: "♙"; }
-nav a:nth-of-type(5)::before { content: "≡"; }
-nav a:nth-of-type(6)::before { content: "₹"; }
-nav a:nth-of-type(7)::before { content: "□"; }
-nav a:nth-of-type(8)::before { content: "◇"; }
+nav a:nth-of-type(5)::before { content: "□"; }
+nav a:nth-of-type(6)::before { content: "◇"; }
+nav a:nth-of-type(7)::before { content: "₹"; }
+nav a:nth-of-type(8)::before { content: "▥"; }
 nav a:nth-of-type(9)::before { content: "◉"; }
-nav a:nth-of-type(10)::before { content: "▥"; }
+nav a:nth-of-type(10)::before { content: "⚙"; }
 nav a:nth-of-type(11)::before { content: "↪"; }
+nav a:nth-of-type(12)::before { content: "×"; }
 
 nav a:hover {
   transform: translateX(2px) !important;
@@ -105,12 +106,13 @@ body.page-edit_bill nav a:nth-of-type(2),
 body.page-bills nav a:nth-of-type(3),
 body.page-view_bill nav a:nth-of-type(3),
 body.page-customers nav a:nth-of-type(4),
-body.page-ledger nav a:nth-of-type(5),
-body.page-payments nav a:nth-of-type(6),
-body.page-products nav a:nth-of-type(7),
-body.page-categories nav a:nth-of-type(8),
+body.page-products nav a:nth-of-type(5),
+body.page-categories nav a:nth-of-type(6),
+body.page-payments nav a:nth-of-type(7),
+body.page-ledger nav a:nth-of-type(8),
+body.page-reports nav a:nth-of-type(8),
 body.page-whatsapp_reminders nav a:nth-of-type(9),
-body.page-reports nav a:nth-of-type(10) {
+body.page-settings nav a:nth-of-type(10) {
   border-color: rgba(134, 220, 174, .18) !important;
   background: linear-gradient(90deg, rgba(43, 164, 102, .28), rgba(43, 164, 102, .10)) !important;
   color: #fff !important;
@@ -123,12 +125,13 @@ body.page-edit_bill nav a:nth-of-type(2)::before,
 body.page-bills nav a:nth-of-type(3)::before,
 body.page-view_bill nav a:nth-of-type(3)::before,
 body.page-customers nav a:nth-of-type(4)::before,
-body.page-ledger nav a:nth-of-type(5)::before,
-body.page-payments nav a:nth-of-type(6)::before,
-body.page-products nav a:nth-of-type(7)::before,
-body.page-categories nav a:nth-of-type(8)::before,
+body.page-products nav a:nth-of-type(5)::before,
+body.page-categories nav a:nth-of-type(6)::before,
+body.page-payments nav a:nth-of-type(7)::before,
+body.page-ledger nav a:nth-of-type(8)::before,
+body.page-reports nav a:nth-of-type(8)::before,
 body.page-whatsapp_reminders nav a:nth-of-type(9)::before,
-body.page-reports nav a:nth-of-type(10)::before {
+body.page-settings nav a:nth-of-type(10)::before {
   background: #2aa566 !important;
   color: #fff !important;
 }
