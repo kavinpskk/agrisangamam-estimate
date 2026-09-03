@@ -2,7 +2,7 @@
   --sidebar-width: 238px;
 }
 
-nav {
+body > nav {
   width: var(--sidebar-width) !important;
   padding: 22px 15px 18px !important;
   gap: 5px !important;
@@ -13,7 +13,7 @@ nav {
   box-shadow: 10px 0 35px rgba(5, 38, 25, .12) !important;
 }
 
-nav strong {
+body > nav strong {
   position: relative !important;
   margin: 0 3px 17px !important;
   padding: 5px 10px 20px 48px !important;
@@ -23,7 +23,7 @@ nav strong {
   letter-spacing: .8px !important;
 }
 
-nav strong::before {
+body > nav strong::before {
   content: "S";
   position: absolute;
   left: 2px;
@@ -40,14 +40,14 @@ nav strong::before {
   box-shadow: 0 7px 18px rgba(0, 0, 0, .18);
 }
 
-nav strong::after {
+body > nav strong::after {
   margin-top: 6px !important;
   color: #9cc8b1 !important;
   font-size: 9px !important;
   letter-spacing: 1.7px !important;
 }
 
-nav a {
+body > nav a {
   min-height: 44px !important;
   display: flex !important;
   align-items: center !important;
@@ -62,7 +62,7 @@ nav a {
   transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease !important;
 }
 
-nav a::before {
+body > nav a::before {
   display: inline-grid;
   place-items: center;
   flex: 0 0 28px;
@@ -75,73 +75,73 @@ nav a::before {
   font-weight: 800;
 }
 
-nav a:nth-of-type(1)::before { content: "⌂"; }
-nav a:nth-of-type(2)::before { content: "▤"; }
-nav a:nth-of-type(3)::before { content: "♙"; }
-nav a:nth-of-type(4)::before { content: "□"; }
-nav a:nth-of-type(5)::before { content: "◇"; }
-nav a:nth-of-type(6)::before { content: "₹"; }
-nav a:nth-of-type(7)::before { content: "▥"; }
-nav a:nth-of-type(8)::before { content: "◉"; }
-nav a:nth-of-type(9)::before { content: "⚙"; }
-nav a:nth-of-type(10)::before { content: "×"; }
+body > nav a:nth-of-type(1)::before { content: "⌂"; }
+body > nav a:nth-of-type(2)::before { content: "▤"; }
+body > nav a:nth-of-type(3)::before { content: "♙"; }
+body > nav a:nth-of-type(4)::before { content: "□"; }
+body > nav a:nth-of-type(5)::before { content: "◇"; }
+body > nav a:nth-of-type(6)::before { content: "₹"; }
+body > nav a:nth-of-type(7)::before { content: "▥"; }
+body > nav a:nth-of-type(8)::before { content: "◉"; }
+body > nav a:nth-of-type(9)::before { content: "⚙"; }
+body > nav a:nth-of-type(10)::before { content: "×"; }
 
-nav a:hover {
+body > nav a:hover {
   transform: translateX(2px) !important;
   border-color: rgba(255, 255, 255, .08) !important;
   background: rgba(255, 255, 255, .08) !important;
   color: #fff !important;
 }
 
-nav a:hover::before {
+body > nav a:hover::before {
   background: rgba(255, 255, 255, .13);
   color: #fff;
 }
 
-body.page-dashboard nav a:nth-of-type(1),
-body.page-new_bill nav a:nth-of-type(2),
-body.page-edit_bill nav a:nth-of-type(2),
-body.page-bills nav a:nth-of-type(2),
-body.page-view_bill nav a:nth-of-type(2),
-body.page-customers nav a:nth-of-type(3),
-body.page-products nav a:nth-of-type(4),
-body.page-categories nav a:nth-of-type(5),
-body.page-payments nav a:nth-of-type(6),
-body.page-ledger nav a:nth-of-type(7),
-body.page-reports nav a:nth-of-type(7),
-body.page-whatsapp_reminders nav a:nth-of-type(8),
-body.page-settings nav a:nth-of-type(9) {
+body.page-dashboard > nav a:nth-of-type(1),
+body.page-new_bill > nav a:nth-of-type(2),
+body.page-edit_bill > nav a:nth-of-type(2),
+body.page-bills > nav a:nth-of-type(2),
+body.page-view_bill > nav a:nth-of-type(2),
+body.page-customers > nav a:nth-of-type(3),
+body.page-products > nav a:nth-of-type(4),
+body.page-categories > nav a:nth-of-type(5),
+body.page-payments > nav a:nth-of-type(6),
+body.page-ledger > nav a:nth-of-type(7),
+body.page-reports > nav a:nth-of-type(7),
+body.page-whatsapp_reminders > nav a:nth-of-type(8),
+body.page-settings > nav a:nth-of-type(9) {
   border-color: rgba(134, 220, 174, .18) !important;
   background: linear-gradient(90deg, rgba(43, 164, 102, .28), rgba(43, 164, 102, .10)) !important;
   color: #fff !important;
   box-shadow: inset 3px 0 0 #4dcb88 !important;
 }
 
-body.page-dashboard nav a:nth-of-type(1)::before,
-body.page-new_bill nav a:nth-of-type(2)::before,
-body.page-edit_bill nav a:nth-of-type(2)::before,
-body.page-bills nav a:nth-of-type(2)::before,
-body.page-view_bill nav a:nth-of-type(2)::before,
-body.page-customers nav a:nth-of-type(3)::before,
-body.page-products nav a:nth-of-type(4)::before,
-body.page-categories nav a:nth-of-type(5)::before,
-body.page-payments nav a:nth-of-type(6)::before,
-body.page-ledger nav a:nth-of-type(7)::before,
-body.page-reports nav a:nth-of-type(7)::before,
-body.page-whatsapp_reminders nav a:nth-of-type(8)::before,
-body.page-settings nav a:nth-of-type(9)::before {
+body.page-dashboard > nav a:nth-of-type(1)::before,
+body.page-new_bill > nav a:nth-of-type(2)::before,
+body.page-edit_bill > nav a:nth-of-type(2)::before,
+body.page-bills > nav a:nth-of-type(2)::before,
+body.page-view_bill > nav a:nth-of-type(2)::before,
+body.page-customers > nav a:nth-of-type(3)::before,
+body.page-products > nav a:nth-of-type(4)::before,
+body.page-categories > nav a:nth-of-type(5)::before,
+body.page-payments > nav a:nth-of-type(6)::before,
+body.page-ledger > nav a:nth-of-type(7)::before,
+body.page-reports > nav a:nth-of-type(7)::before,
+body.page-whatsapp_reminders > nav a:nth-of-type(8)::before,
+body.page-settings > nav a:nth-of-type(9)::before {
   background: #2aa566 !important;
   color: #fff !important;
 }
 
-nav a:last-child {
+body > nav a:last-child {
   margin-top: auto !important;
   border-color: rgba(255, 255, 255, .07) !important;
   background: rgba(255, 255, 255, .045) !important;
   color: #ffc5c0 !important;
 }
 
-nav a:last-child::before {
+body > nav a:last-child::before {
   background: rgba(207, 66, 55, .15);
   color: #ffb6ae;
 }
@@ -156,7 +156,7 @@ nav a:last-child::before {
     --sidebar-width: 258px;
   }
 
-  nav {
+  body > nav {
     width: var(--sidebar-width) !important;
     padding: 20px 14px 16px !important;
   }
@@ -166,13 +166,13 @@ nav a:last-child::before {
     padding: 78px 12px 26px !important;
   }
 
-  nav strong {
+  body > nav strong {
     font-size: 22px !important;
   }
 }
 
 @media print {
-  nav,
+  body > nav,
   .menu-toggle {
     display: none !important;
   }
