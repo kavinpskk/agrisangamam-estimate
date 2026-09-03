@@ -302,6 +302,10 @@
   box-shadow: 0 8px 18px rgba(20, 108, 67, .22);
 }
 
+.payment-cancel-edit {
+  min-height: 40px;
+}
+
 .payment-history .payment-section-head {
   border-bottom: 0;
 }
@@ -326,7 +330,7 @@
 }
 
 .payment-table {
-  min-width: 760px;
+  min-width: 880px;
   margin: 0;
 }
 
@@ -362,6 +366,33 @@
 .payment-table .payment-amount {
   color: #104f31;
   font-size: 16px;
+}
+
+.payment-row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.payment-row-actions form {
+  margin: 0;
+}
+
+.payment-row-actions .btn {
+  min-height: 36px;
+  padding: 8px 12px;
+  font-size: 12px;
+  box-shadow: none;
+}
+
+.payment-row-actions .payment-edit {
+  color: #155f3b;
+  background: #e8f5ed;
+}
+
+.payment-row-actions .payment-delete {
+  background: #c63b33;
 }
 
 .payment-empty {
@@ -512,5 +543,13 @@
 
   .payment-count {
     font-size: 11px;
+  }
+
+  .payment-row-actions {
+    justify-content: flex-start;
+  }
+
+  .payment-row-actions .btn {
+    min-width: 88px;
   }
 }
