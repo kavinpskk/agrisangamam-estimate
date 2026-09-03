@@ -204,14 +204,28 @@
   text-align: center;
 }
 
-.bills-pagination {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 18px;
-  border-top: 1px solid #e1eae5;
-  background: #fbfdfc;
+.page-bills nav.bills-pagination {
+  position: static !important;
+  inset: auto !important;
+  z-index: auto !important;
+  display: flex !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 14px 18px !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  overflow: visible !important;
+  transform: none !important;
+  border: 0 !important;
+  border-top: 1px solid #e1eae5 !important;
+  border-radius: 0 !important;
+  background: #fbfdfc !important;
+  box-shadow: none !important;
+  color: inherit !important;
 }
 
 .bills-pagination > span {
@@ -225,10 +239,31 @@
   gap: 8px;
 }
 
-.bills-pagination .btn {
-  min-height: 39px;
-  padding: 8px 13px;
-  box-shadow: none;
+.page-bills nav.bills-pagination .btn {
+  display: inline-flex !important;
+  width: auto !important;
+  min-height: 39px !important;
+  margin: 0 !important;
+  padding: 8px 13px !important;
+  flex: none !important;
+  gap: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: linear-gradient(135deg, #17794b, #0e5c38) !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  text-align: center !important;
+  box-shadow: none !important;
+}
+
+.page-bills nav.bills-pagination .btn.secondary {
+  background: #edf3ef !important;
+  color: #34483d !important;
+}
+
+.page-bills nav.bills-pagination .btn::before {
+  display: none !important;
+  content: none !important;
 }
 
 @media (max-width: 1100px) {
@@ -366,15 +401,15 @@
     min-height: 40px;
   }
 
-  .bills-pagination {
-    align-items: stretch;
-    flex-direction: column;
-    padding: 13px 14px;
+  .page-bills nav.bills-pagination {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    padding: 13px 14px !important;
   }
 
-  .bills-pagination > div,
-  .bills-pagination .btn {
-    width: 100%;
+  .page-bills nav.bills-pagination > div,
+  .page-bills nav.bills-pagination .btn {
+    width: 100% !important;
   }
 }
 
