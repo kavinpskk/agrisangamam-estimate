@@ -2,8 +2,9 @@
 declare(strict_types=1);
 require_once __DIR__.'/bootstrap.php';
 $backupEmbedded = defined('SGAS_BACKUP_EMBEDDED') && SGAS_BACKUP_EMBEDDED;
+$backupCron = defined('SGAS_BACKUP_CRON') && SGAS_BACKUP_CRON;
 
-if (!logged_in()) {
+if (!$backupCron && !logged_in()) {
     header('Location: index.php?page=login');
     exit;
 }
@@ -32,7 +33,7 @@ function build_database_backup(PDO $pdo): array {
         $sql .= $create[1].";\n\n";
 
         $rowSql = $table === 'settings'
-            ? "SELECT * FROM settings WHERE setting_key NOT IN ('google_drive_backup_url','google_drive_backup_token')"
+            ? "SELECT * FROM settings WHERE setting_key NOT LIKE 'google_drive_%'"
             : 'SELECT * FROM '.$quoted;
         $rows = $pdo->query($rowSql);
         while ($row = $rows->fetch(PDO::FETCH_ASSOC)) {
@@ -79,6 +80,11 @@ function save_drive_settings(PDO $pdo, string $url, string $token): void {
     $stmt->execute(['google_drive_backup_token',$token]);
 }
 
+function save_backup_setting(PDO $pdo, string $key, string $value): void {
+    $stmt = $pdo->prepare('INSERT INTO settings (setting_key,setting_value) VALUES (?,?) ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value)');
+    $stmt->execute([$key,$value]);
+}
+
 function upload_database_backup(PDO $pdo): array {
     if (!function_exists('curl_init')) throw new RuntimeException('Server cURL support is required for Google Drive upload.');
     $url = setting($pdo, 'google_drive_backup_url');
@@ -116,6 +122,57 @@ function upload_database_backup(PDO $pdo): array {
         throw new RuntimeException((string)($result['error'] ?? 'Google Drive did not confirm the backup.'));
     }
     return $result;
+}
+
+function run_automatic_drive_backup(PDO $pdo, bool $force=false): array {
+    $lockName = 'sgas_google_drive_backup';
+    $lockStmt = $pdo->prepare('SELECT GET_LOCK(?,0)');
+    $lockStmt->execute([$lockName]);
+    if ((int)$lockStmt->fetchColumn() !== 1) {
+        return ['ok'=>true,'skipped'=>true,'message'=>'Another backup is already running.'];
+    }
+
+    try {
+        $lastSuccess = setting($pdo, 'google_drive_auto_last_success');
+        if (!$force && $lastSuccess !== '' && date('Y-m-d', strtotime($lastSuccess)) === date('Y-m-d')) {
+            return ['ok'=>true,'skipped'=>true,'message'=>'Today’s backup is already complete.','last_success'=>$lastSuccess];
+        }
+
+        save_backup_setting($pdo, 'google_drive_auto_last_attempt', date('Y-m-d H:i:s'));
+        try {
+            $result = upload_database_backup($pdo);
+            $completedAt = date('Y-m-d H:i:s');
+            save_backup_setting($pdo, 'google_drive_auto_last_success', $completedAt);
+            save_backup_setting($pdo, 'google_drive_auto_last_status', 'success');
+            save_backup_setting($pdo, 'google_drive_auto_last_error', '');
+            return $result + ['skipped'=>false,'completed_at'=>$completedAt];
+        } catch (Throwable $e) {
+            save_backup_setting($pdo, 'google_drive_auto_last_status', 'failed');
+            save_backup_setting($pdo, 'google_drive_auto_last_error', mb_substr($e->getMessage(), 0, 500));
+            throw $e;
+        }
+    } finally {
+        $releaseStmt = $pdo->prepare('SELECT RELEASE_LOCK(?)');
+        $releaseStmt->execute([$lockName]);
+    }
+}
+
+if ($backupCron) {
+    if (PHP_SAPI !== 'cli') {
+        http_response_code(404);
+        exit;
+    }
+    if (setting($pdo, 'google_drive_auto_enabled', '0') !== '1') {
+        fwrite(STDERR, "Automatic Google Drive backup is disabled.\n");
+        exit(2);
+    }
+    try {
+        echo json_encode(run_automatic_drive_backup($pdo), JSON_UNESCAPED_SLASHES).PHP_EOL;
+    } catch (Throwable $e) {
+        fwrite(STDERR, $e->getMessage().PHP_EOL);
+        exit(1);
+    }
+    exit;
 }
 
 function download_csv(PDO $pdo, string $type): never {
@@ -245,6 +302,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: index.php?page=settings&tab=backup');
             exit;
         }
+        if ($action === 'save_auto_backup') {
+            $enabled = ($_POST['auto_enabled'] ?? '') === '1';
+            if ($enabled && (setting($pdo, 'google_drive_backup_url') === '' || setting($pdo, 'google_drive_backup_token') === '')) {
+                throw new RuntimeException('Connect Google Drive before enabling automatic backup.');
+            }
+            save_backup_setting($pdo, 'google_drive_auto_enabled', $enabled ? '1' : '0');
+            $_SESSION['backup_success'] = $enabled ? 'Automatic daily Google Drive backup enabled.' : 'Automatic Google Drive backup disabled.';
+            header('Location: index.php?page=settings&tab=backup');
+            exit;
+        }
+        if ($action === 'test_auto_backup') {
+            if (setting($pdo, 'google_drive_auto_enabled', '0') !== '1') {
+                throw new RuntimeException('Enable automatic backup before running the test.');
+            }
+            $result = run_automatic_drive_backup($pdo, true);
+            $_SESSION['backup_success'] = 'Automatic backup test completed: '.(string)($result['filename'] ?? 'backup uploaded');
+            header('Location: index.php?page=settings&tab=backup');
+            exit;
+        }
         if ($action === 'import_offline') {
             if (($_POST['confirm_import'] ?? '') !== 'yes') throw new RuntimeException('Confirm that you created a fresh backup before importing.');
             $result = import_sgas_sql($pdo, $_FILES['import_file'] ?? []);
@@ -273,7 +349,13 @@ if (!$backupEmbedded) {
     exit;
 }
 $driveUrl = setting($pdo, 'google_drive_backup_url');
-$driveConnected = $driveUrl !== '' && setting($pdo, 'google_drive_backup_token') !== '';
+$driveToken = setting($pdo, 'google_drive_backup_token');
+$driveConnected = $driveUrl !== '' && $driveToken !== '';
+$autoBackupEnabled = setting($pdo, 'google_drive_auto_enabled', '0') === '1';
+$autoBackupLastSuccess = setting($pdo, 'google_drive_auto_last_success');
+$autoBackupLastStatus = setting($pdo, 'google_drive_auto_last_status');
+$autoBackupLastError = setting($pdo, 'google_drive_auto_last_error');
+$autoBackupCronCommand = 'php '.escapeshellarg(__DIR__.'/backup-cron.php');
 
 $counts = [
     'Customers' => (int)$pdo->query('SELECT COUNT(*) FROM customers')->fetchColumn(),
@@ -331,6 +413,37 @@ try {
 <button type="submit">Connect Google Drive</button>
 </form>
 <?php endif; ?>
+<?php if ($driveConnected): ?>
+<div class="auto-backup-panel">
+<div class="auto-backup-head">
+<div><h3>Automatic daily backup</h3><p>Hostinger can run the private server command once every night. Only one backup is created per day.</p></div>
+<span class="auto-backup-state <?=$autoBackupEnabled?'enabled':'disabled'?>"><?=$autoBackupEnabled?'Enabled':'Disabled'?></span>
+</div>
+<div class="auto-backup-details">
+<div><small>Last automatic backup</small><b><?=$autoBackupLastSuccess!==''?e(date('d-m-Y, h:i A',strtotime($autoBackupLastSuccess))):'Not run yet'?></b></div>
+<div><small>Last result</small><b class="<?=$autoBackupLastStatus==='failed'?'backup-result-failed':'backup-result-ok'?>"><?=$autoBackupLastStatus==='failed'?'Failed':($autoBackupLastStatus==='success'?'Successful':'Waiting')?></b></div>
+</div>
+<?php if ($autoBackupLastStatus === 'failed' && $autoBackupLastError !== ''): ?><p class="auto-backup-error"><?=e($autoBackupLastError)?></p><?php endif; ?>
+<form method="post" action="backup.php" class="auto-backup-toggle">
+<input type="hidden" name="csrf" value="<?=csrf()?>">
+<input type="hidden" name="action" value="save_auto_backup">
+<label><input type="checkbox" name="auto_enabled" value="1" <?=$autoBackupEnabled?'checked':''?>><span>Enable automatic daily backup</span></label>
+<button type="submit" class="secondary">Save</button>
+</form>
+<?php if ($autoBackupEnabled): ?>
+<div class="cron-setup">
+<label for="backup-cron-command">Private scheduled-backup command</label>
+<div><input id="backup-cron-command" type="text" readonly value="<?=e($autoBackupCronCommand)?>"><button type="button" class="secondary" onclick="copyBackupCronCommand(this)">Copy Command</button></div>
+<small>Add this command as a daily cron job in Hostinger, preferably at 11:30 PM.</small>
+</div>
+<form method="post" action="backup.php" class="auto-backup-test">
+<input type="hidden" name="csrf" value="<?=csrf()?>">
+<input type="hidden" name="action" value="test_auto_backup">
+<button type="submit">Test Backup Now</button>
+</form>
+<?php endif; ?>
+</div>
+<?php endif; ?>
 </section>
 
 <section class="card import-card">
@@ -364,7 +477,7 @@ try {
 <div class="card backup-guide">
 <h2>Recommended schedule</h2>
 <ul>
-<li><b>Daily:</b> Click Backup to Google Drive.</li>
+<li><b>Daily:</b> Keep automatic Google Drive backup enabled.</li>
 <li><b>Before updates:</b> Create a fresh backup first.</li>
 <li><b>Weekly:</b> Confirm the latest file appears in Google Drive.</li>
 <li><b>Monthly:</b> Keep one permanent archive.</li>
@@ -373,3 +486,11 @@ try {
 </div>
 </section>
 </div>
+<script>
+async function copyBackupCronCommand(button){
+    const input=document.getElementById('backup-cron-command');
+    if(!input)return;
+    try{await navigator.clipboard.writeText(input.value);button.textContent='Copied';setTimeout(()=>button.textContent='Copy Command',1800)}
+    catch(e){input.select();document.execCommand('copy');button.textContent='Copied'}
+}
+</script>
