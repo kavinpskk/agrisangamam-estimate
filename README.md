@@ -18,11 +18,11 @@ After upgrading an existing installation, import each file in `migrations/` once
 
 1. Open **Settings → Backup** and connect the existing Google Apps Script backup endpoint.
 2. Enable **Automatic daily backup** and save.
-3. Copy the protected scheduled-backup URL shown on the page.
-4. In Hostinger, create a daily cron job that opens that URL (recommended time: 11:30 PM, Asia/Kolkata).
+3. Copy the private scheduled-backup command shown on the page.
+4. In Hostinger, create a daily cron job that runs that command (recommended time: 11:30 PM, Asia/Kolkata).
 5. Use **Test Backup Now** once, then confirm the new file appears in the `SGAS Backups` Google Drive folder.
 
-The scheduled endpoint is protected by the existing 64-character Drive token, prevents simultaneous runs, and creates at most one scheduled backup per day. Google Drive connection and scheduling secrets are excluded from generated database backups.
+The scheduled backup is CLI-only and cannot be opened from the public website. It prevents simultaneous runs and creates at most one scheduled backup per day. Google Drive connection settings are excluded from generated database backups.
 
 ## Important behavior
 
