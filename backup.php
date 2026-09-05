@@ -312,9 +312,9 @@ try {
 </section>
 
 <section class="card drive-card">
-<div><span class="backup-icon">GD</span><div><h2>Google Drive backup</h2><p><?= $driveConnected ? 'Send the current database backup directly to the SGAS Backups folder.' : 'Connect the secure Apps Script endpoint to enable one-click Drive backups.' ?></p></div></div>
+<div class="drive-summary"><span class="backup-icon">GD</span><div><h2>Google Drive backup</h2><p><?= $driveConnected ? 'Send the current database backup directly to the SGAS Estimate Backup folder.' : 'Connect the secure Apps Script endpoint to enable one-click Drive backups.' ?></p></div></div>
 <?php if ($driveConnected): ?>
-<form method="post" action="backup.php">
+<form method="post" action="backup.php" class="drive-action-form">
 <input type="hidden" name="csrf" value="<?=csrf()?>">
 <input type="hidden" name="action" value="drive_backup">
 <button type="submit">Backup to Google Drive</button>
