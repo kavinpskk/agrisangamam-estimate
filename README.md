@@ -14,6 +14,16 @@ Use UTF-8/utf8mb4 throughout. The Print / Save PDF button opens the browser prin
 
 After upgrading an existing installation, import each file in `migrations/` once through phpMyAdmin. Migration files are safe to run again.
 
+## Automatic Google Drive backup
+
+1. Open **Settings → Backup** and connect the existing Google Apps Script backup endpoint.
+2. Enable **Automatic daily backup** and save.
+3. Copy the protected scheduled-backup URL shown on the page.
+4. In Hostinger, create a daily cron job that opens that URL (recommended time: 11:30 PM, Asia/Kolkata).
+5. Use **Test Backup Now** once, then confirm the new file appears in the `SGAS Backups` Google Drive folder.
+
+The scheduled endpoint is protected by the existing 64-character Drive token, prevents simultaneous runs, and creates at most one scheduled backup per day. Google Drive connection and scheduling secrets are excluded from generated database backups.
+
 ## Important behavior
 
 - Search and entry use the English product name only.
