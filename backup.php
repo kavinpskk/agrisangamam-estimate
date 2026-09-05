@@ -205,84 +205,6 @@ function download_csv(PDO $pdo, string $type): never {
     exit;
 }
 
-function import_sgas_sql(PDO $pdo, array $upload): array {
-    if (($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-        throw new RuntimeException('Select the converted SGAS SQL file and try again.');
-    }
-    $size = (int)($upload['size'] ?? 0);
-    if ($size < 100 || $size > 5 * 1024 * 1024) {
-        throw new RuntimeException('The import file must be smaller than 5 MB.');
-    }
-    $name = (string)($upload['name'] ?? '');
-    if (strtolower(pathinfo($name, PATHINFO_EXTENSION)) !== 'sql') {
-        throw new RuntimeException('Only the converted SGAS .sql file is accepted.');
-    }
-    $content = file_get_contents((string)$upload['tmp_name']);
-    if ($content === false || !str_starts_with($content, "-- SGAS offline-to-online import\n")) {
-        throw new RuntimeException('This is not a valid SGAS offline-data import file.');
-    }
-    if (!str_contains($content, '-- Financial year: 1 April 2026 to 31 March 2027')) {
-        throw new RuntimeException('The selected file is not the 2026-27 financial-year import.');
-    }
-
-    $allowedTables = ['bill_items','payments','bills','products','categories','customers','settings'];
-    $statements = [];
-    $expected = array_fill_keys(['bill_items','payments','bills','products','categories','customers'], 0);
-    $expectedClosing = null;
-    foreach (preg_split('/\R/u', $content) ?: [] as $lineNumber => $line) {
-        $line = trim($line);
-        if ($line === '') continue;
-        if (str_starts_with($line, '--')) {
-            if (preg_match('/^-- Closing outstanding: ([0-9]+(?:\.[0-9]{1,2})?)$/', $line, $match)) {
-                $expectedClosing = (float)$match[1];
-            }
-            continue;
-        }
-        if (in_array($line, ['SET NAMES utf8mb4;','SET FOREIGN_KEY_CHECKS=0;','SET FOREIGN_KEY_CHECKS=1;','START TRANSACTION;','COMMIT;'], true)) continue;
-        if (preg_match('/^ALTER TABLE (bill_items|payments|bills|products|categories|customers) AUTO_INCREMENT=1;$/', $line)) continue;
-        if (preg_match('/^DELETE FROM (bill_items|payments|bills|products|categories|customers);$/', $line, $match)) {
-            $statements[] = $line;
-            continue;
-        }
-        if (preg_match('/^INSERT INTO (bill_items|payments|bills|products|categories|customers|settings)\s/i', $line, $match)) {
-            $table = strtolower($match[1]);
-            if (!in_array($table, $allowedTables, true)) throw new RuntimeException('Unsupported import table.');
-            $statements[] = $line;
-            if (isset($expected[$table])) $expected[$table]++;
-            continue;
-        }
-        throw new RuntimeException('Unsupported statement on import line '.($lineNumber + 1).'.');
-    }
-    if ($expected['customers'] === 0 || $expected['products'] === 0 || $expected['bills'] === 0 || $expectedClosing === null) {
-        throw new RuntimeException('The import file is incomplete. Nothing was changed.');
-    }
-
-    $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
-    try {
-        $pdo->beginTransaction();
-        foreach ($statements as $statement) $pdo->exec($statement);
-        foreach ($expected as $table => $count) {
-            $actual = (int)$pdo->query('SELECT COUNT(*) FROM `'.$table.'`')->fetchColumn();
-            if ($actual !== $count) throw new RuntimeException('Imported '.$table.' count does not match the file.');
-        }
-        $closing = (float)$pdo->query(
-            "SELECT ROUND((SELECT COALESCE(SUM(opening_balance),0) FROM customers) + "
-            ."(SELECT COALESCE(SUM(subtotal-amount_received),0) FROM bills WHERE status='active') - "
-            ."(SELECT COALESCE(SUM(amount),0) FROM payments), 2)"
-        )->fetchColumn();
-        if (abs($closing - $expectedClosing) > 0.01) {
-            throw new RuntimeException('Closing outstanding validation failed. Nothing was imported.');
-        }
-        $pdo->commit();
-    } catch (Throwable $e) {
-        if ($pdo->inTransaction()) $pdo->rollBack();
-        throw $e;
-    } finally {
-        $pdo->exec('SET FOREIGN_KEY_CHECKS=1');
-    }
-    return $expected + ['closing_balance'=>$expectedClosing];
-}
-
 $backupError = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     check_csrf();
@@ -318,13 +240,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $result = run_automatic_drive_backup($pdo, true);
             $_SESSION['backup_success'] = 'Automatic backup test completed: '.(string)($result['filename'] ?? 'backup uploaded');
-            header('Location: index.php?page=settings&tab=backup');
-            exit;
-        }
-        if ($action === 'import_offline') {
-            if (($_POST['confirm_import'] ?? '') !== 'yes') throw new RuntimeException('Confirm that you created a fresh backup before importing.');
-            $result = import_sgas_sql($pdo, $_FILES['import_file'] ?? []);
-            $_SESSION['backup_success'] = 'Offline data imported successfully: '.number_format($result['customers']).' customers, '.number_format($result['products']).' products, '.number_format($result['bills']).' bills and '.number_format($result['payments']).' payments. Closing outstanding ₹'.number_format($result['closing_balance'], 2).'.';
             header('Location: index.php?page=settings&tab=backup');
             exit;
         }
@@ -446,17 +361,6 @@ try {
 <?php endif; ?>
 </section>
 
-<section class="card import-card">
-<div class="import-copy"><span class="backup-icon">IN</span><div><h2>Import offline financial-year data</h2><p>Upload the converted SGAS 2026-27 SQL file. This replaces existing categories, products, customers, bills and payments after validating the complete file and closing balance.</p></div></div>
-<form method="post" action="backup.php" enctype="multipart/form-data" class="import-form" onsubmit="return confirm('Importing will replace the current business data. Continue?')">
-<input type="hidden" name="csrf" value="<?=csrf()?>">
-<input type="hidden" name="action" value="import_offline">
-<label class="file-field"><span>Converted SGAS SQL file</span><input type="file" name="import_file" accept=".sql,application/sql,text/plain" required></label>
-<label class="import-confirm"><input type="checkbox" name="confirm_import" value="yes" required><span>I downloaded a fresh database backup and understand that existing business data will be replaced.</span></label>
-<button type="submit" class="import-button">Import Offline Data</button>
-</form>
-</section>
-
 <section class="backup-grid">
 <div class="card">
 <h2>Business data exports</h2>
@@ -482,7 +386,6 @@ try {
 <li><b>Weekly:</b> Confirm the latest file appears in Google Drive.</li>
 <li><b>Monthly:</b> Keep one permanent archive.</li>
 </ul>
-<div class="safety-note"><b>Import safety</b><p>Always create a fresh backup before importing offline data. The importer validates record totals and the final customer outstanding balance before committing changes.</p></div>
 </div>
 </section>
 </div>
