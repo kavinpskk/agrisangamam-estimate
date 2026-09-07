@@ -694,7 +694,7 @@ function paginateBillPreview() {
   if (!original) return [];
   const isItemRow = row => /^\d+$/.test(qs('td:first-child', row)?.textContent.trim() || '');
   const sourceRows = qsa('tbody tr', original).filter(isItemRow);
-  const rowsPerPage = 25;
+  // Keep the final balance and Grand Total safely inside the A5 page.\n  const rowsPerPage = 24;
   if (sourceRows.length <= rowsPerPage) {
     wrapper.dataset.paginated = '1';
     return [original];
