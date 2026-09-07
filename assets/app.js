@@ -668,6 +668,20 @@ function billPdfOptions(filename) {
   };
 }
 
+function documentPdfOptions(filename, element) {
+  if (element?.classList.contains('ledger-print')) {
+    return {
+      margin: [8, 8, 8, 8],
+      filename,
+      image: { type: 'jpeg', quality: .98 },
+      html2canvas: { scale: 2.2, useCORS: true, backgroundColor: '#ffffff', logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+      pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.ledger-header', '.ledger-closing'] }
+    };
+  }
+  return billPdfOptions(filename);
+}
+
 function loadPdfScript(src, ready) {
   if (ready()) return Promise.resolve();
   return new Promise((resolve, reject) => {
@@ -885,7 +899,14 @@ async function downloadDocumentPdf(filename) {
     window.print();
     return;
   }
-  await html2pdf().set(billPdfOptions(filename)).from(qs('.pdf-document')).save();
+  const documentElement = qs('.pdf-document');
+  if (!documentElement) return;
+  documentElement.classList.add('pdf-exporting');
+  try {
+    await html2pdf().set(documentPdfOptions(filename, documentElement)).from(documentElement).save();
+  } finally {
+    documentElement.classList.remove('pdf-exporting');
+  }
 }
 
 async function shareDocumentPdf(filename) {
@@ -893,8 +914,16 @@ async function shareDocumentPdf(filename) {
     window.print();
     return;
   }
-  const worker = html2pdf().set(billPdfOptions(filename)).from(qs('.pdf-document')).toPdf();
-  const blob = await worker.outputPdf('blob');
+  const documentElement = qs('.pdf-document');
+  if (!documentElement) return;
+  documentElement.classList.add('pdf-exporting');
+  let blob;
+  try {
+    const worker = html2pdf().set(documentPdfOptions(filename, documentElement)).from(documentElement).toPdf();
+    blob = await worker.outputPdf('blob');
+  } finally {
+    documentElement.classList.remove('pdf-exporting');
+  }
   const file = new File([blob], filename, { type: 'application/pdf' });
   if (navigator.share && navigator.canShare?.({ files: [file] })) {
     try {
