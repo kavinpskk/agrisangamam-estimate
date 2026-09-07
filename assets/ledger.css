@@ -197,3 +197,42 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* PDF export uses A4 landscape so every ledger amount column remains visible. */
+.ledger-print.pdf-exporting {
+  box-sizing: border-box;
+  width: 1050px;
+  max-width: 1050px;
+  padding: 28px;
+  overflow: visible;
+}
+
+.ledger-print.pdf-exporting .ledger-table-wrap {
+  overflow: visible;
+}
+
+.ledger-print.pdf-exporting .ledger-table-wrap table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+  font-size: 11px;
+}
+
+.ledger-print.pdf-exporting .ledger-table-wrap th,
+.ledger-print.pdf-exporting .ledger-table-wrap td {
+  padding: 8px 6px;
+  overflow-wrap: anywhere;
+}
+
+.ledger-print.pdf-exporting .ledger-table-wrap th:nth-child(1) { width: 12%; }
+.ledger-print.pdf-exporting .ledger-table-wrap th:nth-child(2) { width: 12%; }
+.ledger-print.pdf-exporting .ledger-table-wrap th:nth-child(3) { width: 14%; }
+.ledger-print.pdf-exporting .ledger-table-wrap th:nth-child(4) { width: 24%; }
+.ledger-print.pdf-exporting .ledger-table-wrap th:nth-child(5),
+.ledger-print.pdf-exporting .ledger-table-wrap th:nth-child(6),
+.ledger-print.pdf-exporting .ledger-table-wrap th:nth-child(7) { width: 12.66%; }
+
+.ledger-print.pdf-exporting .ledger-table-wrap tr {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
