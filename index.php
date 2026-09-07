@@ -56,31 +56,22 @@ if($_SERVER['REQUEST_METHOD']==='POST'&&$page!=='login'){
  }catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();flash($e->getMessage(),'error');redirect($_SERVER['HTTP_REFERER']??'index.php');}
 }
 
-function header_html(string $title): void { global $page,$pdo; $f=$_SESSION['flash']??null;unset($_SESSION['flash']);$shop=setting($pdo,'shop_name','SGAS');$brand=setting($pdo,'brand_color','#0b432a');$sidebar=setting($pdo,'sidebar_mode','normal');?><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="<?=e($brand)?>"><title><?=e($title)?> — <?=e($shop)?></title><link rel="stylesheet" href="assets/app.css?v=20260907-1"><link rel="stylesheet" href="assets/bill.css?v=20260902-11"><link rel="stylesheet" href="assets/bills.css?v=20260903-2"><link rel="stylesheet" href="assets/sidebar.css?v=20260903-7"><link rel="stylesheet" href="assets/reports.css?v=20260902-4"><link rel="stylesheet" href="assets/products.css?v=20260901-1"><link rel="stylesheet" href="assets/categories.css?v=20260901-1"><link rel="stylesheet" href="assets/ledger.css?v=20260901-1"><link rel="stylesheet" href="assets/customers.css?v=20260901-1"><link rel="stylesheet" href="assets/dashboard.css?v=20260901-1"><link rel="stylesheet" href="assets/payments.css?v=20260903-3"><link rel="stylesheet" href="assets/settings.css?v=20260902-1"><link rel="stylesheet" href="assets/backup.css?v=20260905-1"></head><body class="page-<?=e($page)?> sidebar-<?=e($sidebar)?> mobile-menu-<?=e(setting($pdo,'mobile_menu','collapsed'))?>" style="--brand-color:<?=e($brand)?>"><?php if(logged_in()):?><button type="button" class="menu-toggle no-print" aria-label="Open menu" aria-expanded="false">☰</button><nav class="no-print"><strong><?=e($shop)?></strong><a href="index.php">Dashboard</a><a href="?page=bills">Bills</a><a href="?page=customers">Customers</a><a href="?page=products">Products</a><a href="?page=categories">Categories</a><a href="?page=payments">Receive Payment</a><a href="?page=reports">Reports</a><a href="?page=whatsapp_reminders">WhatsApp</a><a href="?page=settings">Settings</a><a href="?page=logout">Logout</a></nav><?php endif;?><main class="wrap"><?php if($f):?><div class="notice <?=$f['type']==='error'?'error':''?>"><?=e($f['msg'])?></div><?php endif;?><?php }
+function header_html(string $title): void { global $page,$pdo; $f=$_SESSION['flash']??null;unset($_SESSION['flash']);$shop=setting($pdo,'shop_name','SGAS');$brand=setting($pdo,'brand_color','#0b432a');$sidebar=setting($pdo,'sidebar_mode','normal');?><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="<?=e($brand)?>"><title><?=e($title)?> — <?=e($shop)?></title><link rel="stylesheet" href="assets/app.css?v=20260907-2"><link rel="stylesheet" href="assets/bill.css?v=20260902-11"><link rel="stylesheet" href="assets/bills.css?v=20260903-2"><link rel="stylesheet" href="assets/sidebar.css?v=20260903-7"><link rel="stylesheet" href="assets/reports.css?v=20260902-4"><link rel="stylesheet" href="assets/products.css?v=20260901-1"><link rel="stylesheet" href="assets/categories.css?v=20260901-1"><link rel="stylesheet" href="assets/ledger.css?v=20260901-1"><link rel="stylesheet" href="assets/customers.css?v=20260901-1"><link rel="stylesheet" href="assets/dashboard.css?v=20260901-1"><link rel="stylesheet" href="assets/payments.css?v=20260903-3"><link rel="stylesheet" href="assets/settings.css?v=20260902-1"><link rel="stylesheet" href="assets/backup.css?v=20260905-1"></head><body class="page-<?=e($page)?> sidebar-<?=e($sidebar)?> mobile-menu-<?=e(setting($pdo,'mobile_menu','collapsed'))?>" style="--brand-color:<?=e($brand)?>"><?php if(logged_in()):?><button type="button" class="menu-toggle no-print" aria-label="Open menu" aria-expanded="false">☰</button><nav class="no-print"><strong><?=e($shop)?></strong><a href="index.php">Dashboard</a><a href="?page=bills">Bills</a><a href="?page=customers">Customers</a><a href="?page=products">Products</a><a href="?page=categories">Categories</a><a href="?page=payments">Receive Payment</a><a href="?page=reports">Reports</a><a href="?page=whatsapp_reminders">WhatsApp</a><a href="?page=settings">Settings</a><a href="?page=logout">Logout</a></nav><?php endif;?><main class="wrap"><?php if($f):?><div class="notice <?=$f['type']==='error'?'error':''?>"><?=e($f['msg'])?></div><?php endif;?><?php }
 function footer_html(): void {?></main><script src="assets/app.js?v=20260902-62"></script></body></html><?php }
 
 if($page==='login'){header_html('Sign in');?>
 <div class="login-shell">
-<section class="login-brand-panel">
-<div class="login-brand-mark"><span>S</span><b>SGAS</b></div>
-<div class="login-brand-copy">
-<p class="login-eyebrow">Simple business billing</p>
-<h1>Billing made clear, quick and reliable.</h1>
-<p>Manage invoices, customer balances, payments and reports from one secure place.</p>
-</div>
-<div class="login-features"><span>Fast billing</span><span>Customer ledger</span><span>Secure backup</span></div>
-</section>
 <section class="login-panel">
 <div class="login-card">
-<div class="login-mobile-brand"><span>S</span><b>SGAS</b></div>
-<header><p>Welcome back</p><h2>Sign in to your account</h2><span>Enter your details to continue to SGAS.</span></header>
+<div class="login-mobile-brand"><span>S</span><div><b>SGAS Estimate</b><small>Estimate &amp; Billing Management</small></div></div>
+<header><p>Secure sign in</p><h2>Welcome back</h2><span>Enter your username and password to continue.</span></header>
 <form method="post">
 <input type="hidden" name="csrf" value="<?=csrf()?>">
 <label class="login-field"><span>Username</span><input name="username" autocomplete="username" placeholder="Enter username" required autofocus></label>
 <label class="login-field"><span>Password</span><input type="password" name="password" autocomplete="current-password" placeholder="Enter password" required></label>
 <button type="submit">Sign in <span aria-hidden="true">→</span></button>
 </form>
-<p class="login-secure-note"><span aria-hidden="true">●</span> Secure access to your billing data</p>
+<p class="login-secure-note"><span aria-hidden="true">●</span> Your business data is securely protected</p>
 </div>
 </section>
 </div>
