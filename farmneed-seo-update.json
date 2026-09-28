@@ -1,0 +1,14 @@
+{
+  "name": "FarmNeed SEO",
+  "slug": "farmneed-seo",
+  "version": "1.3.0",
+  "package": "https://raw.githubusercontent.com/kavinpskk/agrisangamam-estimate/farmneed-seo-release/farmneed-seo-1.3.0.zip",
+  "homepage": "https://farmneed.in/",
+  "requires": "6.5",
+  "tested": "7.1.2",
+  "requires_php": "7.4",
+  "sections": {
+    "description": "Independent SEO management for FarmNeed with WooCommerce schema, redirects, 404 monitoring, Search Console tools, IndexNow activity, internal-link analysis, SEO health reports, social preview, and merchant policy schema.",
+    "changelog": "1.3.0: Consolidates stable FarmNeed SEO functionality from Code Snippets into the standalone FarmNeed SEO plugin and adds a self-hosted update channel for future releases."
+  }
+}
