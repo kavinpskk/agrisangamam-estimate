@@ -2,8 +2,8 @@
 
 Isolated deployment branch for the FarmNeed SEO plugin. The Agrisangamam Estimate `main` branch is not modified by this release channel.
 
-Current release: `1.3.0`
+Current release: `1.3.1`
 
-Package: `farmneed-seo-1.3.0.zip`
+Package: `farmneed-seo-1.3.1.zip`
 
-SHA-256: `94e6a7de9fadfbd786f169b5de484542474b01e020600d6d746046e48b80ee75`
+SHA-256: `813471d142ce77c39ea4b1b1aca2689ccf6eaf1e63bc9b94b3ae54afdb6dcb9f`
