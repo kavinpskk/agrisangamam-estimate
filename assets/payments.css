@@ -612,3 +612,12 @@
     min-width: 88px;
   }
 }
+
+.payment-after-field.advance {
+  border-color: #8db7df;
+  background: #edf6ff;
+}
+
+.payment-after-field.advance b {
+  color: #145a91;
+}
