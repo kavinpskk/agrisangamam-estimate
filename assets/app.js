@@ -653,12 +653,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const toggle = qs('.menu-toggle');
+  const closeNav = () => {
+    document.body.classList.remove('nav-open');
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.textContent = '☰';
+    }
+  };
   toggle?.addEventListener('click', () => {
     const open = document.body.classList.toggle('nav-open');
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     toggle.textContent = open ? '×' : '☰';
   });
-  qsa('nav a').forEach(link => link.addEventListener('click', () => document.body.classList.remove('nav-open')));
+  qsa('nav a').forEach(link => link.addEventListener('click', closeNav));
+  document.addEventListener('click', event => {
+    if (!document.body.classList.contains('nav-open')) return;
+    if (event.target.closest('nav') || event.target.closest('.menu-toggle')) return;
+    closeNav();
+  });
   recalc();
 });
 
