@@ -167,3 +167,67 @@
   .payment-stats { grid-template-columns: minmax(0,1fr); }
   .payment-stat.outstanding { grid-column: auto; }
 }
+
+
+/* Mobile readability pass: larger text without changing the compact layout. */
+@media (max-width:700px) {
+  .payments-head h1 { font-size: 26px; }
+  .payments-head p { font-size: 12px; line-height: 1.45; }
+  .payments-kicker { font-size: 10px; }
+
+  .payment-stat small { font-size: 9.5px; }
+  .payment-stat b { font-size: 18px; }
+
+  .payment-section-head h2 { font-size: 17px; }
+  .payment-section-head p { font-size: 10.5px; line-height: 1.45; }
+  .payment-detail-meta small { font-size: 9px; }
+  .payment-detail-meta b { font-size: 12px; }
+
+  .payment-form label { font-size: 11.5px; }
+  .payment-form input,
+  .payment-filters input,
+  .payment-filters select {
+    height: 42px;
+    min-height: 42px;
+    font-size: 15px;
+  }
+
+  .payment-before-field small,
+  .payment-after-field small { font-size: 9px; }
+  .payment-before-field b,
+  .payment-after-field b { font-size: 16px; }
+  .payment-after-field .payment-balance-hint { font-size: 8.5px; }
+  .payment-amount-field input {
+    height: 40px;
+    min-height: 40px;
+    font-size: 24px;
+  }
+
+  .payment-customer-options strong { font-size: 13px; }
+  .payment-customer-options small { font-size: 10px; }
+  .payment-option-balance { font-size: 11px; }
+
+  .payment-count { font-size: 9px; }
+  .payment-filters .btn,
+  .payment-filters button { font-size: 11px; }
+
+  .payment-receipt { font-size: 11px; }
+  .payment-table td:nth-child(3) > b { font-size: 12px; line-height: 1.3; }
+  .payment-table td:nth-child(3) > small { font-size: 9px; }
+  .payment-table td:nth-child(4) { font-size: 9.5px; }
+  .payment-table td:nth-child(5) { font-size: 9.5px; line-height: 1.4; }
+  .payment-table td small { font-size: 9px; }
+  .payment-table .payment-amount,
+  .payment-table .payment-amount b { font-size: 13px; }
+
+  .payment-row-actions .btn {
+    min-height: 31px;
+    font-size: 10px;
+  }
+
+  .payment-pagination > span { font-size: 10.5px; }
+  .payment-pagination .btn {
+    min-height: 33px;
+    font-size: 10px;
+  }
+}
