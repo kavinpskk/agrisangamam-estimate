@@ -10,7 +10,6 @@
   .bills-page-head h1,
   .customers-page-head h1,
   .products-page-head h1,
-  .categories-page-head h1,
   .ledger-page-head h1,
   .payments-head h1,
   .reports-heading h1,
@@ -24,7 +23,6 @@
   .dashboard-head p,
   .customers-page-head p,
   .products-page-head p,
-  .categories-page-head p,
   .ledger-page-head p,
   .payments-head p,
   .reports-heading p,
@@ -37,7 +35,6 @@
   /* Forms */
   .customer-form label,
   .product-form label,
-  .category-form label,
   .payment-form label,
   .ledger-selector label,
   .ledger-tools label,
@@ -52,7 +49,6 @@
   .customer-form textarea,
   .product-form input,
   .product-form select,
-  .category-form input,
   .payment-form input,
   .payment-filters input,
   .payment-filters select,
@@ -120,9 +116,7 @@
   .product-editor-head h2 { font-size: 18px !important; }
   .product-table .product-name b { font-size: 15px !important; }
   .product-table .product-tamil { font-size: 13px !important; }
-  .product-table .product-category,
   .product-table .product-unit { font-size: 11.5px !important; }
-  .product-table .product-category::before,
   .product-table .product-unit::before { font-size: 9.5px !important; }
   .product-table .product-rate { font-size: 15px !important; }
   .product-edit-btn { font-size: 12px !important; }
@@ -130,14 +124,6 @@
   #product-page-number { font-size: 11px !important; }
   .product-pagination .btn { font-size: 11px !important; }
 
-  /* Categories */
-  .category-count small { font-size: 10px !important; }
-  .category-count b { font-size: 21px !important; }
-  .category-card-head h2 { font-size: 18px !important; }
-  .category-name { font-size: 15px !important; }
-  .category-table tbody tr[data-category-row] > td:nth-child(3) { font-size: 12px !important; }
-  .category-table tbody tr[data-category-row] > td:nth-child(3)::before { font-size: 9.5px !important; }
-  .category-edit-btn { font-size: 12px !important; }
 
   /* Receive Payment */
   .payments-kicker { font-size: 11px !important; }
