@@ -844,3 +844,69 @@
     break-inside: avoid;
   }
 }
+
+
+/* Mobile readability pass for Reports and WhatsApp reminders. */
+@media (max-width:520px) {
+  .reports-heading h1 { font-size: 29px; }
+  .reports-heading p { font-size: 12px; line-height: 1.5; }
+
+  .report-filter input { height: 40px; font-size: 14px; }
+  .report-filter button { min-height: 40px; font-size: 12px; }
+
+  .report-tab b { font-size: 12.5px; }
+  .report-tab small { font-size: 9px; }
+  .report-tab strong { font-size: 13.5px; }
+
+  .report-summary small { font-size: 9px; }
+  .report-summary b { font-size: 20px; }
+
+  .report-section-head h2 { font-size: 18px; }
+  .report-section-head p { font-size: 10.5px; line-height: 1.45; }
+  .report-section-head > .balance-positive { font-size: 13.5px; }
+
+  #outstanding .report-customer b { font-size: 13px; line-height: 1.35; }
+  #outstanding .report-customer small { font-size: 9px; line-height: 1.35; }
+  #outstanding tbody td:nth-child(5) { font-size: 13px; }
+  #outstanding tbody td:nth-child(5)::before { font-size: 8px; }
+  #outstanding .report-actions .btn { min-height: 31px; font-size: 10px; }
+
+  .page-whatsapp_reminders .reports-heading h1 {
+    font-size: 27px;
+    line-height: 1.1;
+  }
+  .page-whatsapp_reminders .reports-heading p {
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+  #whatsapp-report .report-section-head h2 { font-size: 17px; }
+  #whatsapp-report .report-status { font-size: 9px; }
+
+  .whatsapp-template textarea { font-size: 12.5px; line-height: 1.5; }
+  .whatsapp-template small { font-size: 9px; line-height: 1.45; }
+  .whatsapp-preview { font-size: 11.5px; line-height: 1.5; }
+  .whatsapp-template .actions button {
+    min-height: 38px;
+    font-size: 10px;
+  }
+
+  .whatsapp-list-toolbar b { font-size: 13.5px; }
+  .whatsapp-list-toolbar small { font-size: 9px; }
+  .whatsapp-list-toolbar input {
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .whatsapp-table .report-customer b {
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+  .whatsapp-table .report-customer small { font-size: 9px; }
+  .whatsapp-table .whatsapp-balance { font-size: 12.5px; }
+  .whatsapp-table .whatsapp-phone { font-size: 10px; }
+  .whatsapp-table .whatsapp-action-cell .btn {
+    min-width: 104px;
+    min-height: 31px;
+    font-size: 10px;
+  }
+}
