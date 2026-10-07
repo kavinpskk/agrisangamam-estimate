@@ -217,3 +217,92 @@
     padding: 15px;
   }
 }
+
+
+/* Mobile dashboard: compact cards instead of horizontally scrolling tables. */
+@media (max-width: 700px) {
+  .page-dashboard .wrap { padding-left: 10px !important; padding-right: 10px !important; }
+  .dashboard-head { align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .dashboard-head h1 { font-size: 24px; line-height: 1.15; }
+  .dashboard-head p { font-size: 10px; line-height: 1.4; }
+  .dashboard-date { padding: 7px 9px; font-size: 9px; white-space: nowrap; }
+  .dashboard-stats { gap: 7px; margin-bottom: 10px; }
+  .dashboard-stat { min-height: 76px; padding: 11px; border-radius: 12px; }
+  .dashboard-stat small { font-size: 8.5px; }
+  .dashboard-stat b { margin-top: 5px; font-size: 18px; }
+  .dashboard-quick { padding: 12px; margin-bottom: 10px; }
+  .dashboard-quick h2 { margin-bottom: 9px; font-size: 15px; }
+  .dashboard-quick-actions { gap: 7px; }
+  .dashboard-quick-actions .btn { min-height: 38px; padding: 8px 9px; font-size: 10px; }
+  .dashboard-panel { padding: 12px 10px; margin-bottom: 10px; }
+  .dashboard-panel-head { margin-bottom: 8px; }
+  .dashboard-panel-head h2 { font-size: 15px; }
+  .dashboard-panel-head a { font-size: 9px; }
+  .dashboard-table-wrap { overflow: visible; }
+  .dashboard-table,
+  .dashboard-table tbody { display: block; width: 100%; min-width: 0; overflow: visible; white-space: normal; }
+  .dashboard-table thead { display: none; }
+  .dashboard-table tbody tr { display: grid; width: 100%; padding: 9px 2px; border-bottom: 1px solid #e5ede8; background: transparent; box-shadow: none; }
+  .dashboard-table tbody tr:last-child { border-bottom: 0; }
+  .dashboard-table tbody td { display: block; min-width: 0; padding: 0; border: 0; white-space: normal; }
+
+  .dashboard-panels > .dashboard-panel:first-child .dashboard-table tbody tr {
+    grid-template-columns: minmax(0,1fr) auto;
+    grid-template-areas:
+      "customer amount"
+      "meta actions";
+    gap: 4px 9px;
+    align-items: center;
+  }
+  .dashboard-panels > .dashboard-panel:first-child .dashboard-table td:nth-child(1),
+  .dashboard-panels > .dashboard-panel:first-child .dashboard-table td:nth-child(2) {
+    grid-area: meta;
+    display: inline;
+    color: #74847b;
+    font-size: 8.5px;
+  }
+  .dashboard-panels > .dashboard-panel:first-child .dashboard-table td:nth-child(1)::after { content: " · "; }
+  .dashboard-panels > .dashboard-panel:first-child .dashboard-table td:nth-child(3) {
+    grid-area: customer;
+    color: #263d32;
+    font-size: 11.5px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+  }
+  .dashboard-panels > .dashboard-panel:first-child .dashboard-table td:nth-child(4) {
+    grid-area: amount;
+    color: #155f3b;
+    font-size: 12px;
+    text-align: right !important;
+    white-space: nowrap;
+  }
+  .dashboard-panels > .dashboard-panel:first-child .dashboard-table td:nth-child(5) {
+    grid-area: actions;
+    justify-self: end;
+  }
+
+  .dashboard-panels > .dashboard-panel:last-child .dashboard-table tbody tr {
+    grid-template-columns: minmax(0,1fr) auto;
+    grid-template-areas:
+      "customer balance"
+      "customer actions";
+    gap: 5px 9px;
+    align-items: center;
+  }
+  .dashboard-panels > .dashboard-panel:last-child .dashboard-table td:nth-child(1) { grid-area: customer; }
+  .dashboard-panels > .dashboard-panel:last-child .dashboard-table td:nth-child(2) {
+    grid-area: balance;
+    text-align: right !important;
+    white-space: nowrap;
+    font-size: 11.5px;
+  }
+  .dashboard-panels > .dashboard-panel:last-child .dashboard-table td:nth-child(3) {
+    grid-area: actions;
+    justify-self: end;
+  }
+  .dashboard-customer b { font-size: 11.5px; line-height: 1.3; }
+  .dashboard-customer small { margin-top: 2px; max-width: 210px; overflow: hidden; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+  .dashboard-row-actions { gap: 4px; }
+  .dashboard-row-actions .btn { min-height: 28px; padding: 5px 7px; font-size: 8px; }
+  .dashboard-empty { display: block !important; padding: 16px 6px !important; font-size: 10px; }
+}
