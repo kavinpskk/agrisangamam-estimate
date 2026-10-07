@@ -456,7 +456,7 @@
   .product-table .product-unit::before {
     content: "Unit · ";
     color: #9aa69f;
-    font-size: 7px;
+    font-size: 9px;
     font-weight: 700;
     text-transform: uppercase;
   }
