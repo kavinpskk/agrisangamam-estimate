@@ -8,6 +8,17 @@ function qsa(selector, parent = document) {
 
 const money = value => (Number(value) || 0).toFixed(2);
 const roundMoney = value => Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+const normalizeSearchText = value => String(value ?? '').normalize('NFKC').toLocaleLowerCase().trim().replace(/\s+/g, ' ');
+function searchRelevance(value, query) {
+  const text = normalizeSearchText(value);
+  const q = normalizeSearchText(query);
+  if (!q) return 0;
+  if (text === q) return 0;
+  if (text.startsWith(q)) return 1;
+  if (text.split(' ').some(word => word.startsWith(q))) return 2;
+  if (text.includes(q)) return 3;
+  return 4;
+}
 let priceHistoryRequest = 0;
 
 function hidePriceHistory() {
@@ -436,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clear = qs('.customer-clear');
     const buttons = qsa('button', customerMenu);
     let active = -1;
-    const visible = () => buttons.filter(button => !button.hidden);
+    const visible = () => qsa('button:not([hidden])', customerMenu);
 
     const mark = index => {
       const list = visible();
@@ -468,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const show = (reset = true) => {
-      const term = !reset && customer.value ? '' : search.value.toLowerCase().trim();
+      const term = !reset && customer.value ? '' : normalizeSearchText(search.value);
       if (reset) {
         customer.value = '';
         customer.dataset.balance = '0';
@@ -477,12 +488,21 @@ document.addEventListener('DOMContentLoaded', () => {
         search.setCustomValidity('Select a customer from the list.');
         hidePriceHistory();
       }
+      const tokens = term.split(' ').filter(Boolean);
+      const matches = buttons
+        .filter(button => tokens.every(token => normalizeSearchText(button.dataset.search).includes(token)))
+        .sort((a, b) =>
+          searchRelevance(a.dataset.name || '', term) - searchRelevance(b.dataset.name || '', term)
+          || normalizeSearchText(a.dataset.name).localeCompare(normalizeSearchText(b.dataset.name))
+        );
       buttons.forEach(button => {
-        button.hidden = term !== '' && !button.dataset.search.includes(term);
+        button.hidden = !matches.includes(button);
         button.classList.remove('active');
       });
+      matches.forEach(button => customerMenu.appendChild(button));
       active = -1;
       customerMenu.classList.add('open');
+      customerMenu.scrollTop = 0;
       if (visible().length) mark(0);
       recalc();
     };
