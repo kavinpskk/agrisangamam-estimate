@@ -647,14 +647,14 @@ body.product-modal-open {
 
 @media (max-width: 700px) {
   .product-edit-modal {
-    align-items: end;
-    padding: 10px;
+    place-items: center;
+    padding: 12px;
   }
 
   .product-edit-dialog {
-    width: 100%;
-    max-height: calc(100dvh - 20px);
-    border-radius: 18px 18px 14px 14px;
+    width: min(610px, 100%);
+    max-height: calc(100dvh - 24px);
+    border-radius: 18px;
   }
 
   .product-edit-modal-head {
