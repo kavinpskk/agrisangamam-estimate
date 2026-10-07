@@ -59,3 +59,28 @@ body.page-login{background:#edf4f0}.page-login .wrap{max-width:none;min-height:1
 
 /* Keep newly added product rows clear of the sticky bill summary. */
 @media(min-width:901px){#items{padding-bottom:150px}.item-row{scroll-margin-bottom:180px}.bill-summary{grid-template-columns:repeat(5,minmax(120px,1fr))}}
+
+
+/* New Bill mobile flow: review totals before saving. */
+@media screen and (max-width:900px) {
+  .page-new_bill .bill-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .page-new_bill .bill-summary {
+    order: 1;
+  }
+
+  .page-new_bill .bill-actions {
+    order: 2;
+    width: 100%;
+  }
+
+  .page-new_bill .bill-actions .btn,
+  .page-new_bill .bill-actions .save-bill {
+    min-height: 44px;
+    font-size: 13px;
+  }
+}
