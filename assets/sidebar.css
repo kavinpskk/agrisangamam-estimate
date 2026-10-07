@@ -185,3 +185,18 @@ body > nav a:last-child::before {
     padding: 0 !important;
   }
 }
+
+
+@media (max-width: 900px) {
+  body.nav-open { overflow: hidden; }
+  body.nav-open::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(5, 32, 22, .32);
+    backdrop-filter: blur(1px);
+  }
+  body.nav-open > nav,
+  body.nav-open .menu-toggle { z-index: 80; }
+}
