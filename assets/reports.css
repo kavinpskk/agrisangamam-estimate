@@ -327,9 +327,251 @@
 }
 
 @media (max-width: 520px) {
-  .report-tabs,
+  .page-reports .wrap {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .reports-heading {
+    margin-bottom: 14px;
+  }
+
+  .reports-heading h1 {
+    font-size: 27px;
+  }
+
+  .reports-heading p {
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .report-filter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 11px;
+  }
+
+  .report-filter p {
+    min-width: 0;
+  }
+
+  .report-filter input {
+    min-width: 0;
+    height: 38px;
+    padding: 8px 9px;
+    font-size: 12px;
+  }
+
+  .report-filter button {
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .report-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    margin: 0 -2px 12px;
+    padding: 2px 2px 5px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .report-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .report-tab {
+    flex: 0 0 225px;
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    gap: 8px;
+    min-height: 62px;
+    padding: 10px 11px;
+    border-radius: 12px;
+    scroll-snap-align: start;
+  }
+
+  .report-tab-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .report-tab b {
+    font-size: 11px;
+  }
+
+  .report-tab small {
+    margin-top: 2px;
+    font-size: 8px;
+  }
+
+  .report-tab strong {
+    font-size: 12px;
+  }
+
   .report-summary {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .report-summary .card {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .report-summary .card:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .report-summary small {
+    font-size: 8px;
+  }
+
+  .report-summary b {
+    margin-top: 5px;
+    font-size: 18px;
+  }
+
+  .page-reports .report-section {
+    padding: 13px 11px;
+  }
+
+  .report-section-head {
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .report-section-head h2 {
+    font-size: 17px;
+  }
+
+  .report-section-head p {
+    font-size: 9px;
+    line-height: 1.4;
+  }
+
+  .report-section-head > .balance-positive {
+    flex: 0 0 auto;
+    margin-top: 2px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* Mobile outstanding list: show the information needed for collection,
+     while keeping the complete accounting table unchanged on desktop/print. */
+  #outstanding .report-table-wrap {
+    overflow: visible;
+  }
+
+  #outstanding table,
+  #outstanding tbody {
+    display: block;
+    width: 100%;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  #outstanding thead {
+    display: none;
+  }
+
+  #outstanding tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 5px 10px;
+    width: 100%;
+    padding: 10px 3px;
+    border-bottom: 1px solid #e6eee9;
+    background: transparent;
+  }
+
+  #outstanding tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  #outstanding tbody td {
+    display: block;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+
+  #outstanding tbody td:nth-child(2),
+  #outstanding tbody td:nth-child(3),
+  #outstanding tbody td:nth-child(4) {
+    display: none;
+  }
+
+  #outstanding .report-customer {
+    min-width: 0;
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  #outstanding .report-customer b {
+    color: #243b30;
+    font-size: 11px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  #outstanding .report-customer small {
+    margin-top: 2px;
+    font-size: 8px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  #outstanding tbody td:nth-child(5) {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    color: #a53b32;
+    font-size: 11px;
+    font-weight: 850;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  #outstanding tbody td:nth-child(5)::before {
+    content: "Balance";
+    display: block;
+    margin-bottom: 2px;
+    color: #8a9790;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: .35px;
+    text-transform: uppercase;
+  }
+
+  #outstanding tbody td:nth-child(6) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  #outstanding .report-actions {
+    gap: 5px;
+    margin-top: 3px;
+    white-space: normal;
+  }
+
+  #outstanding .report-actions .btn {
+    min-height: 29px;
+    padding: 6px 9px;
+    border-radius: 7px;
+    font-size: 9px;
+  }
+
+  .ledger-launch {
+    gap: 9px;
   }
 }
 
