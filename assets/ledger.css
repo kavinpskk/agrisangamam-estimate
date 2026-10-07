@@ -236,3 +236,76 @@
   break-inside: avoid;
   page-break-inside: avoid;
 }
+
+
+/* Mobile ledger: compact transaction cards; print/PDF remain tabular. */
+@media screen and (max-width: 700px) {
+  .page-ledger .wrap { padding-left: 10px !important; padding-right: 10px !important; }
+  .ledger-page-head { margin-bottom: 11px; }
+  .ledger-page-head h1 { font-size: 24px; line-height: 1.15; }
+  .ledger-page-head p { font-size: 10px; line-height: 1.4; }
+  .ledger-selector { gap: 9px; padding: 11px; margin-bottom: 10px; }
+  .ledger-selector label { margin-bottom: 4px; font-size: 10px; }
+  .ledger-selector input { min-height: 41px; padding: 8px 10px; font-size: 13px; }
+  .ledger-selector > button { min-height: 39px; font-size: 11px; }
+  .ledger-selected-balance { margin-top: 5px; font-size: 9px; }
+  .ledger-suggestions button { padding: 8px 9px; }
+  .ledger-suggestions strong { font-size: 12px; }
+  .ledger-suggestions small { font-size: 9px; }
+  .ledger-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 10px; }
+  .ledger-tools p { min-width: 0; }
+  .ledger-tools p:nth-of-type(1),
+  .ledger-tools p:nth-of-type(2) { grid-column: auto; }
+  .ledger-tools input { width: 100%; min-height: 39px; padding: 7px 8px; font-size: 11px; }
+  .ledger-tools .btn,
+  .ledger-tools button { min-width: 0; min-height: 36px; padding: 7px 8px; font-size: 9px; }
+  .ledger-summary { gap: 7px; margin-bottom: 10px; }
+  .ledger-summary .card { padding: 10px; border-radius: 11px; }
+  .ledger-summary small { font-size: 7.5px; }
+  .ledger-summary b { margin-top: 4px; font-size: 15px; }
+  .ledger-print { padding: 11px !important; }
+  .ledger-header { padding-bottom: 10px; margin-bottom: 8px; }
+  .ledger-header h1 { font-size: 20px; }
+  .ledger-header p,
+  .ledger-header > div:last-child { font-size: 9px; line-height: 1.45; }
+  .ledger-table-wrap { overflow: visible; }
+  .ledger-table-wrap table,
+  .ledger-table-wrap tbody { display: block; width: 100%; min-width: 0; overflow: visible; white-space: normal; }
+  .ledger-table-wrap thead { display: none; }
+  .ledger-table-wrap tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) auto;
+    grid-template-areas:
+      "particular balance"
+      "reference amount"
+      "date amount"
+      "details details";
+    gap: 3px 9px;
+    align-items: center;
+    width: 100%;
+    padding: 9px 1px;
+    border-bottom: 1px solid #e5ede8;
+  }
+  .ledger-table-wrap tbody tr:last-child { border-bottom: 0; }
+  .ledger-table-wrap tbody td { display: block; min-width: 0; padding: 0; border: 0; white-space: normal; text-align: left !important; overflow-wrap: anywhere; }
+  .ledger-table-wrap tbody td:nth-child(1) { grid-area: date; color: #75847c; font-size: 8px; }
+  .ledger-table-wrap tbody td:nth-child(2) { grid-area: particular; color: #263d32; font-size: 11px; font-weight: 800; }
+  .ledger-table-wrap tbody td:nth-child(3) { grid-area: reference; color: #64766c; font-size: 8.5px; }
+  .ledger-table-wrap tbody td:nth-child(4) { grid-area: details; color: #74847b; font-size: 8.5px; line-height: 1.35; }
+  .ledger-table-wrap tbody td:nth-child(5),
+  .ledger-table-wrap tbody td:nth-child(6) { grid-area: amount; justify-self: end; font-size: 9px; white-space: nowrap; }
+  .ledger-table-wrap tbody td:nth-child(5):not(:empty) { color: #a53b32; }
+  .ledger-table-wrap tbody td:nth-child(6):not(:empty) { color: #167048; }
+  .ledger-table-wrap tbody td:nth-child(7) { grid-area: balance; justify-self: end; color: #163f2d; font-size: 11px; white-space: nowrap; }
+  .ledger-empty { display: block !important; grid-column: 1 / -1; padding: 16px 5px !important; font-size: 10px !important; }
+  .ledger-closing { margin-top: 9px; padding: 10px; }
+  .ledger-closing span { font-size: 10px; }
+  .ledger-closing b { font-size: 16px; }
+
+  .ledger-print.pdf-exporting .ledger-table-wrap table { display: table !important; }
+  .ledger-print.pdf-exporting .ledger-table-wrap thead { display: table-header-group !important; }
+  .ledger-print.pdf-exporting .ledger-table-wrap tbody { display: table-row-group !important; }
+  .ledger-print.pdf-exporting .ledger-table-wrap tr { display: table-row !important; }
+  .ledger-print.pdf-exporting .ledger-table-wrap th,
+  .ledger-print.pdf-exporting .ledger-table-wrap td { display: table-cell !important; text-align: inherit !important; }
+}
