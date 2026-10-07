@@ -1,0 +1,250 @@
+/* SGAS Estimate — final mobile readability layer.
+   Loaded after all page styles. Screen-only; print/PDF sizing is intentionally untouched. */
+@media screen and (max-width:700px) {
+  body:not(.page-login) {
+    font-size: 15px;
+  }
+
+  /* Shared mobile headings and supporting copy */
+  .dashboard-head h1,
+  .bills-page-head h1,
+  .customers-page-head h1,
+  .products-page-head h1,
+  .categories-page-head h1,
+  .ledger-page-head h1,
+  .payments-head h1,
+  .reports-heading h1,
+  .settings-head h1,
+  .backup-heading h1,
+  .page-heading h1 {
+    font-size: 27px !important;
+    line-height: 1.15 !important;
+  }
+
+  .dashboard-head p,
+  .customers-page-head p,
+  .products-page-head p,
+  .categories-page-head p,
+  .ledger-page-head p,
+  .payments-head p,
+  .reports-heading p,
+  .settings-head p,
+  .backup-heading p {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Forms */
+  .customer-form label,
+  .product-form label,
+  .category-form label,
+  .payment-form label,
+  .ledger-selector label,
+  .ledger-tools label,
+  .report-filter label,
+  .settings-form label,
+  .bills-filters label,
+  .bill-form label {
+    font-size: 12px !important;
+  }
+
+  .customer-form input,
+  .customer-form textarea,
+  .product-form input,
+  .product-form select,
+  .category-form input,
+  .payment-form input,
+  .payment-filters input,
+  .payment-filters select,
+  .ledger-selector input,
+  .ledger-tools input,
+  .report-filter input,
+  .settings-form input,
+  .settings-form select,
+  .settings-form textarea,
+  .bills-filters input,
+  .product-toolbar input,
+  .product-toolbar select,
+  .customer-toolbar input,
+  .whatsapp-list-toolbar input,
+  .bill-form input,
+  .bill-form select {
+    font-size: 15px !important;
+  }
+
+  /* Common interactive text — menu toggle excluded */
+  .btn:not(.menu-toggle),
+  button:not(.menu-toggle) {
+    font-size: 12px;
+  }
+
+  .menu-toggle {
+    font-size: 23px !important;
+  }
+
+  /* Dashboard */
+  .dashboard-stat small { font-size: 10px !important; }
+  .dashboard-stat b { font-size: 20px !important; }
+  .dashboard-quick h2,
+  .dashboard-panel-head h2 { font-size: 17px !important; }
+  .dashboard-panel-head a { font-size: 10px !important; }
+  .dashboard-customer b { font-size: 13px !important; }
+  .dashboard-customer small { font-size: 9.5px !important; }
+  .dashboard-row-actions .btn { font-size: 9.5px !important; }
+
+  /* Bills */
+  .bills-stat small { font-size: 10px !important; }
+  .bills-stat b { font-size: 21px !important; }
+  .bills-list-head h2 { font-size: 19px !important; }
+  .bills-list-head p,
+  .bills-pagination > span { font-size: 12px !important; }
+  .bills-table td { font-size: 13px; }
+  .bills-table td::before { font-size: 11px !important; }
+  .bills-customer small { font-size: 11px !important; }
+  .bills-row-actions .btn { font-size: 11px !important; }
+
+  /* Customers */
+  .customer-summary-card small { font-size: 9px !important; }
+  .customer-summary-card b { font-size: 16px !important; }
+  .customer-editor-head h2,
+  .customer-toolbar h2 { font-size: 18px !important; }
+  .customer-identity b { font-size: 14px !important; }
+  .customer-identity small { font-size: 10px !important; }
+  .customer-table tbody tr[data-customer-row] > td:nth-child(3) { font-size: 10px !important; }
+  .customer-balance { font-size: 13px !important; }
+  .customer-row-actions .btn { font-size: 9.5px !important; }
+
+  /* Products */
+  .product-mini-stat small { font-size: 9px !important; }
+  .product-mini-stat b { font-size: 19px !important; }
+  .product-editor-head h2 { font-size: 18px !important; }
+  .product-table .product-name b { font-size: 15px !important; }
+  .product-table .product-tamil { font-size: 13px !important; }
+  .product-table .product-category,
+  .product-table .product-unit { font-size: 11.5px !important; }
+  .product-table .product-category::before,
+  .product-table .product-unit::before { font-size: 9.5px !important; }
+  .product-table .product-rate { font-size: 15px !important; }
+  .product-edit-btn { font-size: 12px !important; }
+  .product-pagination > span,
+  #product-page-number { font-size: 11px !important; }
+  .product-pagination .btn { font-size: 11px !important; }
+
+  /* Categories */
+  .category-count small { font-size: 10px !important; }
+  .category-count b { font-size: 21px !important; }
+  .category-card-head h2 { font-size: 18px !important; }
+  .category-name { font-size: 15px !important; }
+  .category-table tbody tr[data-category-row] > td:nth-child(3) { font-size: 12px !important; }
+  .category-table tbody tr[data-category-row] > td:nth-child(3)::before { font-size: 9.5px !important; }
+  .category-edit-btn { font-size: 12px !important; }
+
+  /* Receive Payment */
+  .payments-kicker { font-size: 11px !important; }
+  .payment-stat small { font-size: 10.5px !important; }
+  .payment-stat b { font-size: 19px !important; }
+  .payment-section-head h2 { font-size: 18px !important; }
+  .payment-section-head p { font-size: 11.5px !important; }
+  .payment-detail-meta small { font-size: 10px !important; }
+  .payment-detail-meta b { font-size: 13px !important; }
+  .payment-before-field small,
+  .payment-after-field small { font-size: 10px !important; }
+  .payment-before-field b,
+  .payment-after-field b { font-size: 17px !important; }
+  .payment-after-field .payment-balance-hint { font-size: 9.5px !important; }
+  .payment-customer-options strong { font-size: 14px !important; }
+  .payment-customer-options small { font-size: 11px !important; }
+  .payment-option-balance { font-size: 12px !important; }
+  .payment-count { font-size: 10px !important; }
+  .payment-receipt { font-size: 12px !important; }
+  .payment-table td:nth-child(3) > b { font-size: 13px !important; }
+  .payment-table td:nth-child(3) > small { font-size: 10px !important; }
+  .payment-table td:nth-child(4),
+  .payment-table td:nth-child(5) { font-size: 10.5px !important; }
+  .payment-table .payment-amount,
+  .payment-table .payment-amount b { font-size: 14px !important; }
+  .payment-row-actions .btn { font-size: 11px !important; }
+  .payment-pagination > span,
+  .payment-pagination .btn { font-size: 11px !important; }
+
+  /* Reports */
+  .report-tab b { font-size: 13.5px !important; }
+  .report-tab small { font-size: 10px !important; }
+  .report-tab strong { font-size: 14px !important; }
+  .report-summary small { font-size: 10px !important; }
+  .report-summary b { font-size: 21px !important; }
+  .report-section-head h2 { font-size: 19px !important; }
+  .report-section-head p { font-size: 11.5px !important; }
+  .report-section-head > .balance-positive { font-size: 14px !important; }
+  #outstanding .report-customer b { font-size: 14px !important; }
+  #outstanding .report-customer small { font-size: 10px !important; }
+  #outstanding tbody td:nth-child(5) { font-size: 14px !important; }
+  #outstanding tbody td:nth-child(5)::before { font-size: 9px !important; }
+  #outstanding .report-actions .btn { font-size: 11px !important; }
+
+  /* WhatsApp reminders */
+  .page-whatsapp_reminders .reports-heading h1 { font-size: 28px !important; }
+  .page-whatsapp_reminders .reports-heading p { font-size: 12.5px !important; }
+  #whatsapp-report .report-section-head h2 { font-size: 18px !important; }
+  #whatsapp-report .report-status { font-size: 10px !important; }
+  .whatsapp-template textarea { font-size: 13.5px !important; }
+  .whatsapp-template small { font-size: 10px !important; }
+  .whatsapp-preview { font-size: 12.5px !important; }
+  .whatsapp-template .actions button { font-size: 11px !important; }
+  .whatsapp-list-toolbar b { font-size: 14.5px !important; }
+  .whatsapp-list-toolbar small { font-size: 10px !important; }
+  .whatsapp-table .report-customer b { font-size: 13.5px !important; }
+  .whatsapp-table .report-customer small { font-size: 10px !important; }
+  .whatsapp-table .whatsapp-balance { font-size: 13.5px !important; }
+  .whatsapp-table .whatsapp-phone { font-size: 11px !important; }
+  .whatsapp-table .whatsapp-action-cell .btn { font-size: 11px !important; }
+
+  /* Ledger */
+  .ledger-selected-balance { font-size: 10px !important; }
+  .ledger-suggestions strong { font-size: 13px !important; }
+  .ledger-suggestions small { font-size: 10px !important; }
+  .ledger-summary small { font-size: 9px !important; }
+  .ledger-summary b { font-size: 17px !important; }
+  .ledger-header p,
+  .ledger-header > div:last-child { font-size: 10px !important; }
+  .ledger-table-wrap tbody td:nth-child(1) { font-size: 9px !important; }
+  .ledger-table-wrap tbody td:nth-child(2) { font-size: 12px !important; }
+  .ledger-table-wrap tbody td:nth-child(3),
+  .ledger-table-wrap tbody td:nth-child(4) { font-size: 9.5px !important; }
+  .ledger-table-wrap tbody td:nth-child(5),
+  .ledger-table-wrap tbody td:nth-child(6) { font-size: 10px !important; }
+  .ledger-table-wrap tbody td:nth-child(7) { font-size: 12px !important; }
+  .ledger-closing span { font-size: 11px !important; }
+  .ledger-closing b { font-size: 18px !important; }
+
+  /* Settings / Backup */
+  .settings-tabs a { font-size: 11px !important; }
+  .settings-panel-head h2 { font-size: 18px !important; }
+  .settings-panel-head p { font-size: 10px !important; }
+  .settings-form small { font-size: 10px !important; }
+  .backup-page { font-size: 13.5px !important; }
+  .backup-stats small,
+  .auto-backup-details small { font-size: 12px !important; }
+
+  /* New/Edit bill entry only; printed bill is excluded */
+  .page-new_bill .bill-form,
+  .page-edit_bill .bill-form {
+    font-size: 15px;
+  }
+  .page-new_bill .customer-suggestions button small,
+  .page-edit_bill .customer-suggestions button small {
+    font-size: 11px !important;
+  }
+  .page-new_bill .bill-summary small,
+  .page-edit_bill .bill-summary small {
+    font-size: 11px !important;
+  }
+}
+
+/* Keep A5 bill preview/print typography exactly as designed. */
+@media screen and (max-width:700px) {
+  .bill-print,
+  .bill-print * {
+    font-size: revert-layer;
+  }
+}
