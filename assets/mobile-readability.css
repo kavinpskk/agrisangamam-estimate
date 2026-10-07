@@ -240,11 +240,3 @@
     font-size: 11px !important;
   }
 }
-
-/* Keep A5 bill preview/print typography exactly as designed. */
-@media screen and (max-width:700px) {
-  .bill-print,
-  .bill-print * {
-    font-size: revert-layer;
-  }
-}
