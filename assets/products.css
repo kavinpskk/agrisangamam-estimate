@@ -706,3 +706,20 @@ body.product-modal-open {
     font-size: 12px;
   }
 }
+
+
+.product-list-status {
+  padding-top: 11px;
+  border-top: 1px solid #e4ece7;
+  color: #687970;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: right;
+}
+
+@media (max-width:700px) {
+  .product-list-status {
+    padding-top: 9px;
+    font-size: 11px;
+  }
+}
