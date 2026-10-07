@@ -92,12 +92,14 @@
   .bills-stat small { font-size: 10px !important; }
   .bills-stat b { font-size: 21px !important; }
   .bills-list-head h2 { font-size: 19px !important; }
-  .bills-list-head p,
-  .bills-pagination > span { font-size: 12px !important; }
-  .bills-table td { font-size: 13px; }
-  .bills-table td::before { font-size: 11px !important; }
-  .bills-customer small { font-size: 11px !important; }
-  .bills-row-actions .btn { font-size: 11px !important; }
+  .bills-list-head p { font-size: 11px !important; }
+  .bills-number { font-size: 15px !important; }
+  .bills-customer b { font-size: 13px !important; }
+  .bills-customer small { font-size: 10px !important; }
+  .bills-table td:nth-child(5),
+  .bills-table td:nth-child(6),
+  .bills-table td:nth-child(7) { font-size: 11px !important; }
+  .bills-row-actions .btn { font-size: 10px !important; }
 
   /* Customers */
   .customer-summary-card small { font-size: 9px !important; }
