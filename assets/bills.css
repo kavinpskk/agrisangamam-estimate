@@ -337,14 +337,29 @@
     padding: 15px 14px 11px;
   }
 
+  .bills-list-head {
+    padding: 13px 12px 9px;
+  }
+
+  .bills-list-head h2 {
+    font-size: 18px;
+  }
+
+  .bills-list-head p {
+    margin-top: 3px;
+    font-size: 11px;
+  }
+
   .bills-table-wrap {
     overflow: visible;
     padding: 0 10px 12px;
     border-top: 0;
   }
 
-  .bills-table {
+  .bills-table,
+  .bills-table tbody {
     display: block;
+    width: 100%;
     min-width: 0;
   }
 
@@ -354,62 +369,189 @@
 
   .bills-table tbody {
     display: grid;
-    gap: 10px;
+    gap: 9px;
   }
 
   .bills-table tr {
     display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      "bill bill date"
+      "customer customer customer"
+      "total received balance"
+      "actions actions actions";
+    gap: 9px 8px;
     padding: 12px;
     border: 1px solid #dce8e1;
-    border-radius: 12px;
+    border-radius: 13px;
     background: #fff;
-    box-shadow: 0 5px 15px rgba(15, 65, 42, .06);
+    box-shadow: 0 4px 12px rgba(15, 65, 42, .045);
   }
 
   .bills-table td {
-    display: grid;
-    grid-template-columns: 92px minmax(0, 1fr);
-    gap: 10px;
-    padding: 6px 0;
+    display: block;
+    min-width: 0;
+    padding: 0;
     border: 0;
     text-align: left !important;
     white-space: normal;
   }
 
   .bills-table td::before {
-    content: attr(data-label);
-    color: #687871;
-    font-size: 12px;
+    display: none;
+  }
+
+  .bills-table td:nth-child(1) {
+    display: none;
+  }
+
+  .bills-table td:nth-child(2) {
+    grid-area: bill;
+    align-self: center;
+  }
+
+  .bills-table td:nth-child(2)::before {
+    content: "Bill No.";
+    display: block;
+    margin-bottom: 2px;
+    color: #7b8982;
+    font-size: 8px;
     font-weight: 800;
+    letter-spacing: .4px;
     text-transform: uppercase;
+  }
+
+  .bills-number {
+    font-size: 15px;
+  }
+
+  .bills-table td:nth-child(3) {
+    grid-area: date;
+    align-self: center;
+    color: #53675d;
+    font-size: 11px;
+    text-align: right !important;
+    white-space: nowrap;
+  }
+
+  .bills-table td:nth-child(3)::before {
+    content: "Date";
+    display: block;
+    margin-bottom: 2px;
+    color: #7b8982;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+  }
+
+  .bills-table td:nth-child(4) {
+    grid-area: customer;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #edf2ef;
+  }
+
+  .bills-customer b {
+    color: #243a2f;
+    font-size: 13px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .bills-customer small {
+    margin-top: 2px;
+    color: #7b8982;
+    font-size: 10px;
+  }
+
+  .bills-table td:nth-child(5),
+  .bills-table td:nth-child(6),
+  .bills-table td:nth-child(7) {
+    min-width: 0;
+    padding: 7px 6px;
+    border-radius: 8px;
+    background: #f7faf8;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: left !important;
+    overflow-wrap: anywhere;
+  }
+
+  .bills-table td:nth-child(5) { grid-area: total; }
+  .bills-table td:nth-child(6) { grid-area: received; }
+  .bills-table td:nth-child(7) { grid-area: balance; }
+
+  .bills-table td:nth-child(5)::before,
+  .bills-table td:nth-child(6)::before,
+  .bills-table td:nth-child(7)::before {
+    display: block;
+    margin-bottom: 3px;
+    color: #78877f;
+    font-size: 7.5px;
+    font-weight: 800;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .bills-table td:nth-child(5)::before { content: "Total"; }
+  .bills-table td:nth-child(6)::before { content: "Received"; }
+  .bills-table td:nth-child(7)::before { content: "Balance"; }
+
+  .bills-table td:nth-child(8) {
+    grid-area: actions;
+    padding-top: 1px;
+  }
+
+  .bills-row-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+    width: 100%;
+  }
+
+  .bills-row-actions .btn {
+    min-width: 0;
+    min-height: 34px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    font-size: 10px;
+    text-align: center;
   }
 
   .bills-table td[colspan] {
     display: block;
+    grid-column: 1 / -1;
   }
 
-  .bills-table td[colspan]::before {
-    display: none;
-  }
-
-  .bills-row-actions {
-    flex-wrap: wrap;
-  }
-
-  .bills-row-actions .btn {
-    flex: 1;
-    min-height: 40px;
+  .bills-empty {
+    padding: 20px 8px !important;
+    font-size: 11px;
   }
 
   .page-bills nav.bills-pagination {
-    align-items: stretch !important;
-    flex-direction: column !important;
-    padding: 13px 14px !important;
+    align-items: center !important;
+    flex-direction: row !important;
+    padding: 11px 12px !important;
   }
 
-  .page-bills nav.bills-pagination > div,
+  .page-bills nav.bills-pagination > span {
+    flex: 0 0 auto;
+    font-size: 10px !important;
+  }
+
+  .page-bills nav.bills-pagination > div {
+    display: flex !important;
+    width: auto !important;
+    margin-left: auto;
+    gap: 6px;
+  }
+
   .page-bills nav.bills-pagination .btn {
-    width: 100% !important;
+    width: auto !important;
+    min-height: 32px !important;
+    padding: 6px 9px !important;
+    border-radius: 8px !important;
+    font-size: 10px !important;
   }
 }
 
