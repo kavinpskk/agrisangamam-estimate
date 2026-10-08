@@ -45,12 +45,6 @@
 /* SGAS New Bill: compact, fast-entry polish. Screen only; A5 print remains unchanged. */
 @media screen {
   .page-new_bill .page-heading { margin-bottom: 12px; }
-  .page-new_bill .bill-customer-status {
-    display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
-    padding: 5px 9px; border: 1px solid #cce5d5; border-radius: 8px;
-    background: #edf8f1; color: #365b46; font-size: 11px; font-weight: 650;
-  }
-  .page-new_bill .bill-customer-status strong { color: #14633e; font-size: 13px; }
   .page-new_bill .bill-customer-error,
   .page-new_bill .bill-row-error-message {
     display: block; color: #a33127; font-size: 11px; font-weight: 650; line-height: 1.35;
