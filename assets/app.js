@@ -425,7 +425,7 @@ document.addEventListener('click', event => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20261008-1')) billCss.href = 'assets/bill.css?v=20261008-1';
+  if (billCss && !billCss.href.includes('v=20261008-2')) billCss.href = 'assets/bill.css?v=20261008-2';
   const billPrint = qs('.bill-print');
   if (billPrint) paginateBillPreview();
   qsa('.bill-items-print tbody tr:not(.bill-table-filler) td:nth-child(2)').forEach(cell => {
@@ -470,16 +470,6 @@ document.addEventListener('DOMContentLoaded', () => {
     billToolbar.appendChild(photoButton);
   }
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
-  qs('#bill-add-product')?.addEventListener('click', () => {
-    const blankRow = qsa('.item-row').find(row =>
-      !qs('.product-id', row).value && !qs('.product-search', row).value.trim()
-    );
-    if (blankRow) {
-      qs('.product-search', blankRow).focus();
-      return;
-    }
-    addRow({}, true);
-  });
   if (window.__editingBill) {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     requestAnimationFrame(() => {
