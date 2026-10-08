@@ -567,6 +567,20 @@ document.addEventListener('DOMContentLoaded', () => {
       show(false);
     });
 
+    // Focus the customer search after a fresh bill's search handlers are installed.
+    // Respect a field the user has already focused and never override bill editing.
+    if (!qs('input[name="bill_id"]')?.value) {
+      const focusFreshBillCustomer = () => {
+        if (!search.isConnected || document.hidden) return;
+        const active = document.activeElement;
+        if (active !== search && active !== document.body && active !== document.documentElement) return;
+        search.focus({ preventScroll: true });
+      };
+      requestAnimationFrame(focusFreshBillCustomer);
+      window.addEventListener('pageshow', event => {
+        if (event.persisted) requestAnimationFrame(focusFreshBillCustomer);
+      });
+    }
   }
 
   qs('.price-popup-close')?.addEventListener('click', hidePriceHistory);
