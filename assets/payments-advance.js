@@ -40,15 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (after < 0) {
       afterField.classList.add('advance');
       afterLabel.textContent = 'Advance After Payment';
-      remaining.textContent = 'Advance ' + money(after);
+      remaining.textContent = money(after);
       hint.textContent = 'Credit available for future bills';
     } else if (after > 0) {
       afterField.classList.add('due');
-      remaining.textContent = 'Balance ' + money(after);
+      remaining.textContent = money(after);
       hint.textContent = validAmount ? 'Still to be received' : 'Enter the payment amount';
     } else {
       if (validAmount) afterField.classList.add('settled');
-      remaining.textContent = validAmount ? 'Paid Completely' : money(0);
+      remaining.textContent = money(0);
       hint.textContent = validAmount ? 'No outstanding balance' : 'No outstanding balance · payment becomes advance';
     }
   };
