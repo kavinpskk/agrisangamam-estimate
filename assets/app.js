@@ -51,6 +51,12 @@ function recalc() {
 
   const customer = qs('#bill-customer');
   const previous = Number(customer?.dataset.balance) || 0;
+  const customerStatus = qs('#bill-customer-status');
+  if (customerStatus) {
+    customerStatus.hidden = !customer?.value;
+    const customerOutstanding = qs('#bill-customer-outstanding');
+    if (customerOutstanding) customerOutstanding.textContent = '₹' + money(previous);
+  }
   const receivedInput = qs('#bill-received');
   const received = Number(receivedInput?.value) || 0;
 
@@ -64,13 +70,28 @@ function recalc() {
   return total;
 }
 
+function setBillRowFeedback(row, invalidInput = null, message = '') {
+  if (!row) return;
+  const feedback = qs('.bill-row-error-message', row);
+  qsa('input', row).forEach(input => input.removeAttribute('aria-invalid'));
+  if (feedback) {
+    feedback.textContent = message;
+    feedback.hidden = !message;
+  }
+  row.classList.toggle('row-error', Boolean(message));
+  if (invalidInput && message) invalidInput.setAttribute('aria-invalid', 'true');
+}
+
 function validateProductRow(row, focusInvalid = true) {
   const productInput = qs('.product-search', row);
   const productId = qs('.product-id', row).value;
-  if (!productInput.value.trim() && !productId) return true;
+  if (!productInput.value.trim() && !productId) {
+    setBillRowFeedback(row);
+    return true;
+  }
   if (!productId) {
-    row.classList.add('row-error');
     productInput.setCustomValidity('Select a product from the suggestions.');
+    setBillRowFeedback(row, productInput, 'Select a product from the suggestions.');
     if (focusInvalid) {
       productInput.focus();
       productInput.reportValidity();
@@ -81,14 +102,17 @@ function validateProductRow(row, focusInvalid = true) {
   recalc();
   const invalid = [qs('.qty', row), qs('.rate', row)].find(input => !input.checkValidity());
   if (invalid) {
-    row.classList.add('row-error');
+    const message = invalid.classList.contains('qty')
+      ? 'Enter a quantity greater than zero.'
+      : 'Enter a valid rate (zero or more).';
+    setBillRowFeedback(row, invalid, message);
     if (focusInvalid) {
       invalid.focus();
       invalid.reportValidity();
     }
     return false;
   }
-  row.classList.remove('row-error');
+  setBillRowFeedback(row);
   return true;
 }
 
@@ -190,7 +214,7 @@ function addRow(data = {}, focus = false) {
   }
 
   qsa('input', row).forEach(input => input.addEventListener('input', () => {
-    row.classList.remove('row-error');
+    setBillRowFeedback(row);
     recalc();
   }));
 
@@ -375,6 +399,9 @@ function bindProductSearch(row) {
 document.addEventListener('click', event => {
   const link = event.target.closest?.('a.new-bill-entry');
   if (!link || event.defaultPrevented || event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  // Use normal desktop navigation for reliable focus on every new bill.
+  // The mobile-only helper preserves the existing virtual-keyboard behavior.
+  if (!window.matchMedia('(max-width: 900px)').matches) return;
   event.preventDefault();
 
   const helper = document.createElement('input');
@@ -398,7 +425,7 @@ document.addEventListener('click', event => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20260902-11')) billCss.href = 'assets/bill.css?v=20260902-11';
+  if (billCss && !billCss.href.includes('v=20261008-1')) billCss.href = 'assets/bill.css?v=20261008-1';
   const billPrint = qs('.bill-print');
   if (billPrint) paginateBillPreview();
   qsa('.bill-items-print tbody tr:not(.bill-table-filler) td:nth-child(2)').forEach(cell => {
@@ -443,6 +470,16 @@ document.addEventListener('DOMContentLoaded', () => {
     billToolbar.appendChild(photoButton);
   }
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
+  qs('#bill-add-product')?.addEventListener('click', () => {
+    const blankRow = qsa('.item-row').find(row =>
+      !qs('.product-id', row).value && !qs('.product-search', row).value.trim()
+    );
+    if (blankRow) {
+      qs('.product-search', blankRow).focus();
+      return;
+    }
+    addRow({}, true);
+  });
   if (window.__editingBill) {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     requestAnimationFrame(() => {
@@ -463,6 +500,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const search = qs('#bill-customer-search');
   const customer = qs('#bill-customer');
   const customerMenu = qs('#customer-suggestions');
+  const customerError = qs('#bill-customer-error');
 
   if (search && customer && customerMenu) {
     if (customer.value && !customer.dataset.name) customer.dataset.name = search.value.split(' — ')[0];
@@ -491,6 +529,8 @@ document.addEventListener('DOMContentLoaded', () => {
       customer.dataset.name = button.dataset.name || '';
       search.value = (button.dataset.name || qs('strong', button).textContent) + ' — ' + (button.dataset.address || 'Address not available');
       search.setCustomValidity('');
+      search.removeAttribute('aria-invalid');
+      if (customerError) customerError.hidden = true;
       if (clear) clear.hidden = false;
       customerMenu.classList.remove('open');
       buttons.forEach(item => item.classList.remove('active'));
@@ -508,6 +548,8 @@ document.addEventListener('DOMContentLoaded', () => {
         customer.dataset.name = '';
         if (clear) clear.hidden = true;
         search.setCustomValidity('Select a customer from the list.');
+        search.removeAttribute('aria-invalid');
+        if (customerError) customerError.hidden = true;
         hidePriceHistory();
       }
       const tokens = term.split(' ').filter(Boolean);
@@ -561,6 +603,8 @@ document.addEventListener('DOMContentLoaded', () => {
       customer.dataset.name = '';
       clear.hidden = true;
       search.setCustomValidity('');
+      search.removeAttribute('aria-invalid');
+      if (customerError) customerError.hidden = true;
       hidePriceHistory();
       recalc();
       search.focus();
@@ -645,6 +689,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!customer?.value) {
       event.preventDefault();
       search?.setCustomValidity('Select a customer from the list.');
+      search?.setAttribute('aria-invalid', 'true');
+      if (customerError) customerError.hidden = false;
       search?.reportValidity();
       return;
     }
@@ -654,6 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       const first = qs('.item-row .product-search');
       first?.setCustomValidity('Add at least one product.');
+      if (first) setBillRowFeedback(first.closest('.item-row'), first, 'Add at least one product.');
       first?.focus();
       first?.reportValidity();
       return;
