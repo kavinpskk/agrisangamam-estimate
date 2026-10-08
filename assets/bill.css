@@ -40,3 +40,68 @@
 .bill-print.multi-page{display:flex!important;flex-direction:column!important;gap:8mm!important;width:136mm!important;height:auto!important;min-height:198mm!important;overflow:visible!important;background:transparent!important;box-shadow:none!important}.bill-print.multi-page .bill-paper{flex:0 0 198mm!important;box-shadow:0 8px 28px rgba(0,0,0,.09)!important}
 @media print{@page{size:A5 portrait;margin:5mm}html,body{width:auto!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important;background:#fff!important}body>nav,body>.menu-toggle,.no-print,.notice.no-print{display:none!important}main.wrap{box-sizing:border-box!important;width:136mm!important;max-width:136mm!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important}.bill-print,.bill-paper{box-sizing:border-box!important;width:136mm!important;max-width:136mm!important;height:198mm!important;min-height:198mm!important;margin:0!important;box-shadow:none!important;break-inside:avoid!important;page-break-inside:avoid!important}.bill-print.multi-page{display:block!important;height:auto!important;overflow:visible!important}.bill-print.multi-page .bill-paper{margin:0!important;box-shadow:none!important;page-break-after:always!important;break-after:page!important}.bill-print.multi-page .bill-paper:last-child{page-break-after:auto!important;break-after:auto!important}.bill-paper{box-shadow:inset -.4mm 0 0 #111!important}}
 @media screen and (max-width:600px){.bill-print{width:min(136mm,calc(100vw - 24px))!important;max-width:calc(100vw - 24px)!important;height:auto!important;min-height:0!important}.bill-paper{width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:136/198!important}.bill-paper .bill-print-meta b,.bill-paper .bill-print-meta strong,.bill-paper .bill-print-meta span{font-size:9.5px!important}.bill-paper .bill-items-print th,.bill-paper .bill-items-print td{font-size:9.5px!important}.bill-paper .bill-items-print td[lang="ta"]{font-size:10.5px!important}.bill-paper .balance-summary td{font-size:9.5px!important}.bill-paper .current-bill-total span{font-size:10px!important}.bill-paper .current-bill-total b{font-size:16px!important}}
+
+
+/* SGAS New Bill: compact, fast-entry polish. Screen only; A5 print remains unchanged. */
+@media screen {
+  .page-new_bill .page-heading { margin-bottom: 12px; }
+  .page-new_bill .bill-customer-status {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+    padding: 5px 9px; border: 1px solid #cce5d5; border-radius: 8px;
+    background: #edf8f1; color: #365b46; font-size: 11px; font-weight: 650;
+  }
+  .page-new_bill .bill-customer-status strong { color: #14633e; font-size: 13px; }
+  .page-new_bill .bill-customer-error,
+  .page-new_bill .bill-row-error-message {
+    display: block; color: #a33127; font-size: 11px; font-weight: 650; line-height: 1.35;
+  }
+  .page-new_bill .bill-customer-error { margin-top: 5px; }
+  .page-new_bill .bill-row-error-message { grid-column: 2 / -2; margin: 0 2px 2px; }
+  .page-new_bill .bill-form input[aria-invalid="true"] {
+    border-color: #c94439; box-shadow: 0 0 0 2px rgba(201,68,57,.14);
+  }
+  .page-new_bill .bill-add-item { padding: 0 18px 10px; }
+  .page-new_bill .bill-add-product {
+    min-height: 35px; padding: 7px 12px; border: 1px solid #b5d9c6;
+    background: #e8f5ed; color: #12633c; box-shadow: none; font-size: 12px;
+  }
+  .page-new_bill .bill-add-product:hover { background: #d8ede1; box-shadow: none; }
+  .page-new_bill .item-row .product-search:focus,
+  .page-new_bill #bill-customer-search:focus {
+    border-color: #14834e; box-shadow: 0 0 0 3px rgba(20,131,78,.18);
+  }
+  .page-new_bill .bill-footer { margin-top: 0; gap: 12px; padding: 12px 18px 14px; }
+  .page-new_bill .bill-summary { gap: 8px; }
+  .page-new_bill .bill-summary > div { padding: 8px 9px; }
+  .page-new_bill .bill-summary #subtotal,
+  .page-new_bill .bill-summary #closing-balance { font-size: 20px; font-weight: 800; }
+  .page-new_bill .bill-actions .save-bill { min-width: 142px; }
+}
+@media screen and (min-width: 901px) {
+  .page-new_bill .bill-top {
+    grid-template-columns: minmax(0,1.7fr) minmax(290px,1fr);
+    gap: 16px; padding: 14px 18px;
+  }
+  .page-new_bill .bill-info-stack { gap: 8px; }
+  .page-new_bill .bill-info-stack > div { padding: 8px 10px; }
+  .page-new_bill .items-table-head,
+  .page-new_bill .item-row {
+    grid-template-columns: 44px minmax(0,3.7fr) minmax(60px,.6fr) minmax(54px,.55fr)
+      minmax(74px,.85fr) minmax(83px,.95fr) 36px;
+    gap: 8px;
+  }
+  .page-new_bill .items-table-head {
+    min-height: 42px; margin: 10px 18px 8px; padding: 9px 10px; font-size: 12px;
+  }
+  .page-new_bill #items { padding: 0 18px 8px; }
+  .page-new_bill .item-row { padding: 8px 10px; margin-bottom: 7px; align-items: center; }
+  .page-new_bill .item-row input { height: 39px; padding: 8px 9px; }
+  .page-new_bill .item-row .sno-cell b { height: 37px; }
+  .page-new_bill .item-row .remove { height: 39px; }
+}
+@media screen and (max-width: 900px) {
+  .page-new_bill .bill-add-item { padding: 0 10px 10px; }
+  .page-new_bill .bill-row-error-message { grid-column: 1 / -1; }
+  .page-new_bill .bill-summary #subtotal,
+  .page-new_bill .bill-summary #closing-balance { font-size: 18px; }
+}
