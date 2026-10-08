@@ -60,12 +60,6 @@
   .page-new_bill .bill-form input[aria-invalid="true"] {
     border-color: #c94439; box-shadow: 0 0 0 2px rgba(201,68,57,.14);
   }
-  .page-new_bill .bill-add-item { padding: 0 18px 10px; }
-  .page-new_bill .bill-add-product {
-    min-height: 35px; padding: 7px 12px; border: 1px solid #b5d9c6;
-    background: #e8f5ed; color: #12633c; box-shadow: none; font-size: 12px;
-  }
-  .page-new_bill .bill-add-product:hover { background: #d8ede1; box-shadow: none; }
   .page-new_bill .item-row .product-search:focus,
   .page-new_bill #bill-customer-search:focus {
     border-color: #14834e; box-shadow: 0 0 0 3px rgba(20,131,78,.18);
@@ -78,6 +72,27 @@
   .page-new_bill .bill-actions .save-bill { min-width: 142px; }
 }
 @media screen and (min-width: 901px) {
+  /* Align the summary with the viewport bottom on short bills, but allow
+     the product list and form to grow normally for longer bills. */
+  .page-new_bill .wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-bottom: 16px;
+  }
+  .page-new_bill .bill-form {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    min-height: 0;
+    margin-bottom: 0;
+  }
+  .page-new_bill #items { flex: 1 0 auto; }
+  .page-new_bill .bill-footer {
+    flex: 0 0 auto;
+    margin-top: auto;
+  }
   .page-new_bill .bill-top {
     grid-template-columns: minmax(0,1.7fr) minmax(290px,1fr);
     gap: 16px; padding: 14px 18px;
@@ -100,7 +115,6 @@
   .page-new_bill .item-row .remove { height: 39px; }
 }
 @media screen and (max-width: 900px) {
-  .page-new_bill .bill-add-item { padding: 0 10px 10px; }
   .page-new_bill .bill-row-error-message { grid-column: 1 / -1; }
   .page-new_bill .bill-summary #subtotal,
   .page-new_bill .bill-summary #closing-balance { font-size: 18px; }
