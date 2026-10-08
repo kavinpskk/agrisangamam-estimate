@@ -17,15 +17,16 @@
 .payment-entry, .payment-history { margin-bottom: 14px; padding: 0; overflow: visible; box-shadow: 0 4px 20px rgba(16,69,43,.04); }
 .payment-section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; border-bottom: 1px solid #e2ebe6; }
 .payment-section-head h2 { margin: 0; font-size: 17px; }
-.payment-detail-meta { display: flex; align-items: center; gap: 8px; }
-.payment-detail-meta > span { padding: 6px 12px; border: 1px solid #c7dfd2; border-radius: 9px; background: #edf8f2; white-space: nowrap; }
+.payment-detail-meta { display: flex; align-items: flex-end; min-width: 0; }
+.payment-detail-meta > span { display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; width: 100%; min-height: 40px; padding: 5px 10px; border: 1px solid #c7dfd2; border-radius: 9px; background: #edf8f2; white-space: nowrap; }
 .payment-detail-meta small, .payment-detail-meta b { display: block; }
 .payment-detail-meta small { color: #61756b; font-size: 10px; font-weight: 650; }
 .payment-detail-meta b { margin-top: 2px; color: #155f3b; font-size: 15px; }
-.payment-form { display: grid; grid-template-columns: minmax(0,1fr) 220px; gap: 12px 14px; align-items: end; padding: 14px 16px 16px; }
+.payment-form { display: grid; grid-template-columns: minmax(0,1fr) minmax(155px,220px) minmax(110px,142px); gap: 12px 14px; align-items: end; padding: 14px 16px 16px; }
 .payment-form p, .payment-form > div { min-width: 0; margin: 0; }
 .payment-form label { margin-bottom: 5px; color: #314a3e; font-size: 12px; font-weight: 700; }
 .payment-form input, .payment-filters input, .payment-filters select { width: 100%; height: 40px; min-height: 40px; padding: 9px 11px; border-color: #cbdcd3; background: #fff; font-size: 13px; border-radius: 8px; }
+.payment-customer-field { max-width: 640px; }
 .payment-customer-picker { position: relative; }
 .payment-customer-picker > input { padding-right: 42px; font-weight: 600; }
 .payment-customer-picker > input::-webkit-search-cancel-button { -webkit-appearance: none; }
@@ -102,20 +103,21 @@
   .payment-section-head { padding: 10px 11px; align-items: flex-start; }
   .payment-section-head h2 { font-size: 15px; }
   .payment-section-head p { margin-top: 3px; font-size: 9px; line-height: 1.35; }
-  .payment-detail-meta { flex-direction: column; align-items: flex-end; gap: 5px; }
-  .payment-detail-meta > span { padding: 5px 7px; border-radius: 7px; }
+  .payment-detail-meta { align-items: flex-end; }
+  .payment-detail-meta > span { min-height: 42px; padding: 5px 7px; border-radius: 7px; }
   .payment-detail-meta small { font-size: 8px; }
   .payment-detail-meta b { font-size: 11px; }
-  .payment-form { grid-template-columns: 1fr; padding: 10px 11px 11px; gap: 9px; }
+  .payment-form { grid-template-columns: minmax(0,1fr) minmax(112px,.55fr); padding: 10px 11px 11px; gap: 9px; }
   .payment-form label { margin-bottom: 4px; font-size: 10px; }
-  .payment-customer-field { order: 0; }
-  .payment-balance-preview { order: 1; grid-template-columns: 1fr 1fr; grid-template-areas: "before after" "amount amount"; gap: 7px; }
+  .payment-customer-field { grid-column: 1 / -1; order: 0; max-width: none; }
+  .payment-balance-preview { grid-column: 1 / -1; order: 3; grid-template-columns: 1fr 1fr; grid-template-areas: "before after" "amount amount"; gap: 7px; }
   .payment-before-field { grid-area: before; }
   .payment-after-field { grid-area: after; }
   .payment-amount-field { grid-area: amount; }
-  .payment-date-field { order: 2; }
-  .payment-note { order: 3; }
-  .payment-save { order: 4; min-height: 40px; font-size: 12px; }
+  .payment-date-field { order: 1; }
+  .payment-detail-meta { order: 2; }
+  .payment-note { grid-column: 1 / -1; order: 4; }
+  .payment-save { grid-column: 1 / -1; order: 5; min-height: 40px; font-size: 12px; }
   .payment-before-field, .payment-after-field, .payment-amount-field { min-height: 0; padding: 9px 10px; border-radius: 9px; }
   .payment-before-field { display: block; }
   .payment-before-field small, .payment-after-field small { font-size: 8px; line-height: 1.25; }
