@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const option = selected();
     amount.removeAttribute('max');
     afterField.classList.remove('due', 'settled', 'advance');
-    beforeLabel.textContent = 'Outstanding Before Payment';
+    beforeLabel.textContent = 'Outstanding';
     afterLabel.textContent = 'Balance After Payment';
     if (!option) {
       current.textContent = remaining.textContent = '—';
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const before = Math.round(Number(option.dataset.balance) * 100);
     const paid = Math.max(0, Math.round((Number(amount.value) || 0) * 100));
     const after = before - paid;
-    beforeLabel.textContent = before < 0 ? 'Existing Advance' : 'Outstanding Before Payment';
+    beforeLabel.textContent = before < 0 ? 'Advance' : 'Outstanding';
     current.textContent = money(before);
     const validAmount = amount.value !== '' && amount.validity.valid;
     if (after < 0) {
