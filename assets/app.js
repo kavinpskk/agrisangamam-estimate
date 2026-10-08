@@ -567,18 +567,24 @@ document.addEventListener('DOMContentLoaded', () => {
       show(false);
     });
 
-    // Focus the customer search after a fresh bill's search handlers are installed.
-    // Respect a field the user has already focused and never override bill editing.
+    // Focus Customer Name for EACH fresh bill, even if the browser restored
+    // focus to another control after the preceding bill was saved.
+    // Do not touch edit bills or steal focus after the user starts interacting.
     if (!qs('input[name="bill_id"]')?.value) {
+      let focused = false;
+      let userInteracted = false;
+      const noteInteraction = () => { userInteracted = true; };
+      document.addEventListener('pointerdown', noteInteraction, { capture: true, once: true });
+      document.addEventListener('keydown', noteInteraction, { capture: true, once: true });
       const focusFreshBillCustomer = () => {
-        if (!search.isConnected || document.hidden) return;
-        const active = document.activeElement;
-        if (active !== search && active !== document.body && active !== document.documentElement) return;
+        if (focused || userInteracted || !search.isConnected || document.hidden) return;
         search.focus({ preventScroll: true });
+        focused = document.activeElement === search;
       };
       requestAnimationFrame(focusFreshBillCustomer);
-      window.addEventListener('pageshow', event => {
-        if (event.persisted) requestAnimationFrame(focusFreshBillCustomer);
+      window.addEventListener('pageshow', focusFreshBillCustomer);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) requestAnimationFrame(focusFreshBillCustomer);
       });
     }
   }
