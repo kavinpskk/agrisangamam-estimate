@@ -17,11 +17,9 @@
 .payment-entry, .payment-history { margin-bottom: 14px; padding: 0; overflow: visible; box-shadow: 0 4px 20px rgba(16,69,43,.04); }
 .payment-section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; border-bottom: 1px solid #e2ebe6; }
 .payment-section-head h2 { margin: 0; font-size: 17px; }
-.payment-detail-meta { display: flex; align-items: flex-end; min-width: 0; }
-.payment-detail-meta > span { display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; width: 100%; min-height: 40px; padding: 5px 10px; border: 1px solid #c7dfd2; border-radius: 9px; background: #edf8f2; white-space: nowrap; }
-.payment-detail-meta small, .payment-detail-meta b { display: block; }
-.payment-detail-meta small { color: #61756b; font-size: 10px; font-weight: 650; }
-.payment-detail-meta b { margin-top: 2px; color: #155f3b; font-size: 15px; }
+.payment-detail-meta { min-width: 0; }
+.payment-detail-meta b { display: block; color: #155f3b; font-size: 15px; font-variant-numeric: tabular-nums; }
+.payment-receipt-box { background: #edf8f2 !important; border-color: #c7dfd2 !important; }
 .payment-form { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 10px 12px; align-items: end; padding: 12px 16px 14px; }
 .payment-customer-field { grid-column: span 5; }
 .payment-before-field { grid-column: span 2; }
@@ -30,7 +28,9 @@
 .payment-amount-field { grid-column: span 2; }
 .payment-after-field { grid-column: span 2; }
 .payment-form p, .payment-form > div { min-width: 0; margin: 0; }
-.payment-form label { margin-bottom: 5px; color: #314a3e; font-size: 12px; font-weight: 700; }
+.payment-form label, .payment-form .payment-field-label { display: block; min-height: 16px; margin: 0 0 6px; color: #314a3e; font-size: 12px; font-weight: 700; line-height: 16px; }
+.payment-form .payment-display-box { box-sizing: border-box; display: flex; align-items: center; width: 100%; height: 40px; min-height: 40px; padding: 8px 11px; border: 1px solid #cbdcd3; border-radius: 8px; background: #f8faf9; }
+.payment-form .payment-display-box b { display: block; margin: 0; font-size: 15px; line-height: 1.3; font-weight: 750; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .payment-form input, .payment-filters input, .payment-filters select { width: 100%; height: 40px; min-height: 40px; padding: 9px 11px; border-color: #cbdcd3; background: #fff; font-size: 13px; border-radius: 8px; }
 .payment-customer-field { min-width: 0; }
 .payment-customer-picker { position: relative; }
@@ -47,18 +47,17 @@
 .payment-customer-options button:hover, .payment-customer-options button.active { background: #0e633c; color: #fff; box-shadow: inset 3px 0 0 #efbb4f; }
 .payment-customer-options button:hover small, .payment-customer-options button.active small { color: #e1f2e8; }
 .payment-no-results { padding: 12px; color: #64756d; font-size: 13px; }
-.payment-before-field, .payment-amount-field, .payment-after-field { box-sizing: border-box; min-width: 0; min-height: 67px; padding: 8px 10px; border: 1px solid #dce7e0; border-radius: 9px; background: #f6f9f7; display: flex; flex-direction: column; justify-content: center; }
-.payment-before-field small, .payment-after-field small { display: block; color: #566e60; font-size: 11px; font-weight: 650; }
-.payment-before-field b, .payment-after-field b { display: block; margin-top: 5px; color: #214a35; font-size: 17px; line-height: 1.25; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.payment-amount-field { border-color: #9bc8af; background: #f0f8f3; }
-.payment-amount-field label { display: flex; justify-content: space-between; color: #215c3b; }
-.payment-amount-field input { height: 36px; min-height: 36px; padding: 4px 7px; border: 1.5px solid #6bab88; color: #104f31; font-size: 18px; font-weight: 750; text-align: right; }
-.payment-after-field .payment-balance-hint { margin-top: 5px; font-size: 10px; font-weight: 500; line-height: 1.4; }
-.payment-after-field.due { background: #fff5f3; border-color: #edc9c2; }
+.payment-before-field, .payment-amount-field, .payment-after-field { position: relative; box-sizing: border-box; min-width: 0; }
+.payment-before-field .payment-display-box b, .payment-after-field .payment-display-box b { color: #214a35; }
+.payment-amount-field label { color: #215c3b; }
+.payment-amount-field::after { content: "₹"; position: absolute; bottom: 10px; left: 10px; color: #215c3b; font-size: 15px; font-weight: 700; pointer-events: none; }
+.payment-amount-field input { height: 40px; min-height: 40px; padding: 7px 9px 7px 24px; border: 1.5px solid #6bab88; color: #104f31; background: #f0f8f3; font-size: 18px; font-weight: 750; text-align: right; }
+.payment-after-field .payment-balance-hint { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.payment-after-field.due .payment-display-box { background: #fff5f3; border-color: #edc9c2; }
 .payment-after-field.due b { color: #a33127; }
-.payment-after-field.settled { background: #eaf7ee; border-color: #a9d6b9; }
+.payment-after-field.settled .payment-display-box { background: #eaf7ee; border-color: #a9d6b9; }
 .payment-after-field.settled b { color: #17623a; }
-.payment-after-field.advance { background: #edf6ff; border-color: #9ebfdf; }
+.payment-after-field.advance .payment-display-box { background: #edf6ff; border-color: #9ebfdf; }
 .payment-after-field.advance b { color: #145a91; }
 .payment-optional { margin-left: 4px; color: #748379; font-weight: 400; }
 .payment-note { grid-column: span 6; }
@@ -109,10 +108,8 @@
   .payment-section-head { padding: 10px 11px; align-items: flex-start; }
   .payment-section-head h2 { font-size: 15px; }
   .payment-section-head p { margin-top: 3px; font-size: 9px; line-height: 1.35; }
-  .payment-detail-meta { align-items: flex-end; }
-  .payment-detail-meta > span { min-height: 42px; padding: 5px 7px; border-radius: 7px; }
-  .payment-detail-meta small { font-size: 8px; }
-  .payment-detail-meta b { font-size: 11px; }
+  .payment-detail-meta .payment-display-box { min-height: 42px; height: 42px; padding: 7px 9px; }
+  .payment-detail-meta b { font-size: 12px; }
   .payment-form { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 10px 11px 11px; gap: 9px; }
   .payment-form label { margin-bottom: 4px; font-size: 10px; }
   .payment-customer-field { grid-column: 1 / -1; order: 0; }
@@ -123,14 +120,12 @@
   .payment-after-field { grid-column: 1 / -1; order: 5; }
   .payment-note { grid-column: 1 / -1; order: 6; }
   .payment-save { grid-column: 1 / -1; order: 7; min-height: 40px; font-size: 12px; }
-  .payment-before-field, .payment-after-field, .payment-amount-field { min-height: 0; padding: 9px 10px; border-radius: 9px; }
-  .payment-before-field { display: block; }
-  .payment-before-field small, .payment-after-field small { font-size: 8px; line-height: 1.25; }
-  .payment-before-field b { margin-top: 5px; white-space: normal; font-size: 14px; }
-  .payment-after-field b { margin-top: 5px; font-size: 14px; }
-  .payment-after-field .payment-balance-hint { margin-top: 3px; font-size: 7.5px; }
+  .payment-before-field, .payment-after-field, .payment-amount-field { min-height: 0; padding: 0; }
+  .payment-form .payment-display-box { min-height: 42px; height: 42px; padding: 7px 9px; }
+  .payment-before-field b, .payment-after-field b { white-space: normal; font-size: 15px; }
   .payment-form input, .payment-filters input, .payment-filters select { height: 40px; min-height: 40px; padding: 8px 10px; font-size: 13px; }
-  .payment-amount-field input { height: 38px; min-height: 38px; font-size: 21px; }
+  .payment-amount-field input { height: 42px; min-height: 42px; font-size: 21px; }
+  .payment-amount-field::after { bottom: 12px; }
   .payment-customer-clear { top: 5px; height: 30px; width: 30px; }
   .payment-customer-options { max-height: 42vh; }
   .payment-customer-options button { min-height: 52px; padding: 8px 10px; }
@@ -190,7 +185,7 @@
   .payment-detail-meta small { font-size: 9px; }
   .payment-detail-meta b { font-size: 12px; }
 
-  .payment-form label { font-size: 11.5px; }
+  .payment-form label, .payment-form .payment-field-label { font-size: 11.5px; }
   .payment-form input,
   .payment-filters input,
   .payment-filters select {
@@ -203,7 +198,6 @@
   .payment-after-field small { font-size: 9px; }
   .payment-before-field b,
   .payment-after-field b { font-size: 16px; }
-  .payment-after-field .payment-balance-hint { font-size: 8.5px; }
   .payment-amount-field input {
     height: 40px;
     min-height: 40px;
