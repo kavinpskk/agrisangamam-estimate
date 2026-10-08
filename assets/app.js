@@ -373,8 +373,6 @@ function bindProductSearch(row) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const appCss = qs('link[href^="assets/app.css"]');
-  if (appCss && !appCss.href.includes('v=20260902-37')) appCss.href = 'assets/app.css?v=20260902-37';
   const billCss = qs('link[href^="assets/bill.css"]');
   if (billCss && !billCss.href.includes('v=20260902-11')) billCss.href = 'assets/bill.css?v=20260902-11';
   const billPrint = qs('.bill-print');
@@ -544,6 +542,13 @@ document.addEventListener('DOMContentLoaded', () => {
       search.focus();
       show(false);
     });
+
+    if (!window.__editingBill && !customer.value) {
+      requestAnimationFrame(() => {
+        search.focus();
+        search.select();
+      });
+    }
   }
 
   qs('.price-popup-close')?.addEventListener('click', hidePriceHistory);
