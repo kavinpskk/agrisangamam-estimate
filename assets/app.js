@@ -51,12 +51,6 @@ function recalc() {
 
   const customer = qs('#bill-customer');
   const previous = Number(customer?.dataset.balance) || 0;
-  const customerStatus = qs('#bill-customer-status');
-  if (customerStatus) {
-    customerStatus.hidden = !customer?.value;
-    const customerOutstanding = qs('#bill-customer-outstanding');
-    if (customerOutstanding) customerOutstanding.textContent = '₹' + money(previous);
-  }
   const receivedInput = qs('#bill-received');
   const received = Number(receivedInput?.value) || 0;
 
@@ -425,7 +419,7 @@ document.addEventListener('click', event => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
-  if (billCss && !billCss.href.includes('v=20261008-2')) billCss.href = 'assets/bill.css?v=20261008-2';
+  if (billCss && !billCss.href.includes('v=20261008-3')) billCss.href = 'assets/bill.css?v=20261008-3';
   const billPrint = qs('.bill-print');
   if (billPrint) paginateBillPreview();
   qsa('.bill-items-print tbody tr:not(.bill-table-filler) td:nth-child(2)').forEach(cell => {
@@ -472,10 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (qs('#items') && qsa('.item-row').length === 0 && !window.__editingBill) addRow();
   if (window.__editingBill) {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    requestAnimationFrame(() => {
-      document.activeElement?.blur();
-      window.scrollTo(0, 0);
-    });
+    requestAnimationFrame(() => window.scrollTo(0, 0));
     setTimeout(() => window.scrollTo(0, 0), 120);
   }
   const subtotal = qs('#subtotal');
@@ -561,7 +552,10 @@ document.addEventListener('DOMContentLoaded', () => {
       recalc();
     };
 
-    search.addEventListener('focus', () => show(false));
+    // Autofocus does not open every customer on an existing bill.
+    // Click or begin typing to change the selected customer.
+    search.addEventListener('focus', () => { if (!customer.value) show(false); });
+    search.addEventListener('click', () => { if (customer.value) show(false); });
     search.addEventListener('input', () => show(true));
     search.addEventListener('keydown', event => {
       if (event.key === 'ArrowDown') {
@@ -601,26 +595,23 @@ document.addEventListener('DOMContentLoaded', () => {
       show(false);
     });
 
-    // Focus Customer Name for EACH fresh bill, even if the browser restored
-    // focus to another control after the preceding bill was saved.
-    // Do not touch edit bills or steal focus after the user starts interacting.
-    if (!qs('input[name="bill_id"]')?.value) {
-      let focused = false;
-      let userInteracted = false;
-      const noteInteraction = () => { userInteracted = true; };
-      document.addEventListener('pointerdown', noteInteraction, { capture: true, once: true });
-      document.addEventListener('keydown', noteInteraction, { capture: true, once: true });
-      const focusFreshBillCustomer = () => {
-        if (focused || userInteracted || !search.isConnected || document.hidden) return;
-        search.focus({ preventScroll: true });
-        focused = document.activeElement === search;
-      };
-      requestAnimationFrame(focusFreshBillCustomer);
-      window.addEventListener('pageshow', focusFreshBillCustomer);
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) requestAnimationFrame(focusFreshBillCustomer);
-      });
-    }
+    // Focus Customer Name on every New Bill and Edit Bill opening.
+    // Never move focus after the user has begun interacting.
+    let customerFocusApplied = false;
+    let userInteracted = false;
+    const noteInteraction = () => { userInteracted = true; };
+    document.addEventListener('pointerdown', noteInteraction, { capture: true, once: true });
+    document.addEventListener('keydown', noteInteraction, { capture: true, once: true });
+    const focusBillCustomer = () => {
+      if (customerFocusApplied || userInteracted || !search.isConnected || document.hidden) return;
+      search.focus({ preventScroll: true });
+      customerFocusApplied = document.activeElement === search;
+    };
+    requestAnimationFrame(focusBillCustomer);
+    window.addEventListener('pageshow', focusBillCustomer);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) requestAnimationFrame(focusBillCustomer);
+    });
   }
 
   qs('.price-popup-close')?.addEventListener('click', hidePriceHistory);
