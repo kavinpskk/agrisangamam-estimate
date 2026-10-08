@@ -543,14 +543,6 @@ document.addEventListener('DOMContentLoaded', () => {
       show(false);
     });
 
-    if (!window.__editingBill && !customer.value) {
-      const focusCustomer = () => {
-        search.focus({ preventScroll: true });
-        search.select();
-      };
-      requestAnimationFrame(focusCustomer);
-      setTimeout(focusCustomer, 120);
-    }
   }
 
   qs('.price-popup-close')?.addEventListener('click', hidePriceHistory);
