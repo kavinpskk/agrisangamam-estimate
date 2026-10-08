@@ -372,6 +372,30 @@ function bindProductSearch(row) {
   }, 180));
 }
 
+document.addEventListener('click', event => {
+  const link = event.target.closest?.('a.new-bill-entry');
+  if (!link || event.defaultPrevented || event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+
+  const helper = document.createElement('input');
+  helper.type = 'text';
+  helper.inputMode = 'text';
+  helper.setAttribute('aria-hidden', 'true');
+  helper.tabIndex = -1;
+  helper.style.cssText = 'position:fixed;left:1px;bottom:1px;width:2px;height:2px;padding:0;border:0;opacity:.01;z-index:-1';
+  document.body.appendChild(helper);
+  helper.focus();
+
+  try {
+    if (navigator.virtualKeyboard && typeof navigator.virtualKeyboard.show === 'function') {
+      navigator.virtualKeyboard.show();
+    }
+  } catch (error) {}
+
+  const href = link.href;
+  setTimeout(() => { window.location.href = href; }, 60);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   const billCss = qs('link[href^="assets/bill.css"]');
   if (billCss && !billCss.href.includes('v=20260902-11')) billCss.href = 'assets/bill.css?v=20260902-11';
