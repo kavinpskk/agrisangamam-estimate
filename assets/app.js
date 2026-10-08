@@ -544,10 +544,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (!window.__editingBill && !customer.value) {
-      requestAnimationFrame(() => {
-        search.focus();
+      const focusCustomer = () => {
+        search.focus({ preventScroll: true });
         search.select();
-      });
+      };
+      requestAnimationFrame(focusCustomer);
+      setTimeout(focusCustomer, 120);
     }
   }
 
