@@ -39,7 +39,7 @@ function recalc() {
     const rate = Number(rateInput.value);
 
     qtyInput.setCustomValidity(selected && (!Number.isFinite(qty) || qty <= 0) ? 'Enter a quantity greater than zero.' : '');
-    rateInput.setCustomValidity(selected && (!Number.isFinite(rate) || rate < 0) ? 'Enter a valid non-negative rate.' : '');
+    rateInput.setCustomValidity(selected && (rateInput.value.trim() === '' || !Number.isFinite(rate) || rate < 0) ? 'Enter a valid non-negative rate.' : '');
 
     const amount = selected && qty > 0 && rate >= 0 ? roundMoney(qty * rate) : 0;
     qs('.amount', row).value = money(amount);
