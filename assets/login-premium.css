@@ -261,7 +261,7 @@ body.page-login {
 }
 .page-login .auth-form { display: grid; gap: 22px; }
 .page-login .auth-field { display: grid; gap: 9px; margin: 0; }
-.page-login .auth-field > span {
+.page-login .auth-field > label {
   color: #30483b;
   font-size: 12px;
   font-weight: 750;
