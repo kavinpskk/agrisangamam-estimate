@@ -11,8 +11,9 @@ body.page-login {
   width: 100%;
   max-width: none;
   min-height: 100vh;
-  margin: 0;
-  padding: 0;
+  /* Override the global sidebar .wrap !important offsets on sign-in. */
+  margin: 0 !important;
+  padding: 0 !important;
 }
 .page-login .notice {
   position: fixed;
