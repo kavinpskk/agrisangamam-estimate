@@ -93,19 +93,19 @@ if($page==='login'){header_html('Sign in');?>
         <p class="auth-card-intro">Sign in to continue to your SGAS dashboard.</p>
         <form class="auth-form" method="post">
           <input type="hidden" name="csrf" value="<?=csrf()?>">
-          <label class="auth-field" for="auth-username"><span>Username</span>
+          <div class="auth-field"><label for="auth-username">Username</label>
             <span class="auth-input">
               <span class="auth-input-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg></span>
               <input id="auth-username" name="username" type="text" autocomplete="username" placeholder="Enter your username" required autofocus>
             </span>
-          </label>
-          <label class="auth-field" for="auth-password"><span>Password</span>
+          </div>
+          <div class="auth-field"><label for="auth-password">Password</label>
             <span class="auth-input">
               <span class="auth-input-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
               <input id="auth-password" class="auth-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
               <button class="auth-password-toggle" type="button" aria-label="Show password" aria-controls="auth-password" aria-pressed="false">Show</button>
             </span>
-          </label>
+          </div>
           <button class="auth-submit" type="submit">Sign in to Dashboard <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
         </form>
         <p class="auth-secure-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-3.6 8-10V5l-8-3-8 3v7c0 6.4 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg> Access is restricted to authorised users</p>
